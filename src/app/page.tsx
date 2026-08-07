@@ -117,7 +117,7 @@ export default function HomePage() {
         {loading ? (
           <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-[#99907c]">
             <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
-            <p className="text-xs font-semibold font-label">Loading CINEPHILE Journal Entries...</p>
+            <p className="text-xs font-semibold font-label">Loading KINO Journal Entries...</p>
           </div>
         ) : (
           /* Media Grid List */
@@ -153,7 +153,7 @@ export default function HomePage() {
       <footer className="w-full border-t border-[#292a2c] bg-[#0d0e10] py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#99907c] font-label">
           <div className="flex items-center gap-2">
-            <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">CINEPHILE</span>
+            <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">KINO</span>
             <span>— Personal Cinema & Media Journal</span>
           </div>
           <p className="text-center sm:text-right">

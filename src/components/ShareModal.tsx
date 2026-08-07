@@ -31,8 +31,8 @@ export function ShareModal({ title, slug }: ShareModalProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `CINEPHILE — ${title}`,
-          text: `Check out this review of "${title}" on CINEPHILE!`,
+          title: `KINO — ${title}`,
+          text: `Check out this review of "${title}" on KINO!`,
           url: url,
         });
       } catch (error) {
@@ -44,7 +44,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
   };
 
   const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    `Check out this review of "${title}" on CINEPHILE!`
+    `Check out this review of "${title}" on KINO!`
   )}&url=${encodeURIComponent(getShareUrl())}`;
 
   return (

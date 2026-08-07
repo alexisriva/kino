@@ -19,16 +19,16 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
 
   if (!res.success || !res.post) {
     return {
-      title: 'Post Not Found — CINEPHILE',
+      title: 'Post Not Found — KINO',
     };
   }
 
   const post = res.post;
   return {
-    title: `${post.title} (${post.releaseYear || ''}) Review — CINEPHILE Journal`,
+    title: `${post.title} (${post.releaseYear || ''}) Review — KINO Journal`,
     description: post.plot || post.review.slice(0, 160),
     openGraph: {
-      title: `${post.title} — CINEPHILE Review`,
+      title: `${post.title} — KINO Review`,
       description: post.plot || post.review.slice(0, 160),
       images: post.posterUrl ? [{ url: post.posterUrl }] : [],
     },

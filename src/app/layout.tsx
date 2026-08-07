@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CINEPHILE — Cinema & Media Review Journal",
+  title: "KINO — Cinema & Media Review Journal",
   description: "Curated reviews for movies, TV series, documentaries, and anime with anonymous likes, dislikes, and social sharing.",
-  keywords: ["cinephile", "movies", "reviews", "cinema", "tv shows", "documentaries", "letterboxd", "kino"],
+  keywords: ["kino", "movies", "reviews", "cinema", "tv shows", "documentaries", "letterboxd"],
 };
 
 export default function RootLayout({
