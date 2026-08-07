@@ -43,7 +43,7 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
               e.stopPropagation();
               onEdit && onEdit(post);
             }}
-            className="p-1.5 rounded bg-[#0d0e10]/90 backdrop-blur-md text-[#f2ca50] hover:bg-[#f2ca50] hover:text-[#121315] border border-[#f2ca50]/40 shadow-lg transition-all"
+            className="p-1.5 rounded bg-[#0d0e10]/90 backdrop-blur-md text-[#f2ca50] hover:bg-[#f2ca50] hover:text-[#121315] border border-[#f2ca50]/40 shadow-lg transition-all cursor-pointer"
             title="Edit Entry"
           >
             <Edit3 className="w-3.5 h-3.5" />
@@ -55,7 +55,7 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
               e.stopPropagation();
               onDelete && onDelete(post.id);
             }}
-            className="p-1.5 rounded bg-[#0d0e10]/90 backdrop-blur-md text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/40 shadow-lg transition-all"
+            className="p-1.5 rounded bg-[#0d0e10]/90 backdrop-blur-md text-rose-400 hover:bg-rose-500 hover:text-white border border-rose-500/40 shadow-lg transition-all cursor-pointer"
             title="Delete Entry"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -64,7 +64,7 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
       )}
 
       {/* Poster Aspect Ratio Frame */}
-      <Link href={`/post/${post.slug}`} className="relative aspect-[2/3] w-full overflow-hidden bg-[#0d0e10]">
+      <Link href={`/post/${post.slug}`} className="relative aspect-[2/3] w-full overflow-hidden bg-[#0d0e10] cursor-pointer">
         {post.posterUrl ? (
           <img
             src={post.posterUrl}
@@ -99,7 +99,7 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
           <div className="flex items-center justify-between gap-2">
             <Link
               href={`/post/${post.slug}`}
-              className="font-headline text-base font-bold text-[#e3e2e5] hover:text-[#f2ca50] transition-colors line-clamp-1"
+              className="font-headline text-base font-bold text-[#e3e2e5] hover:text-[#f2ca50] transition-colors line-clamp-1 cursor-pointer"
             >
               {post.title}
             </Link>

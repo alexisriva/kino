@@ -55,7 +55,7 @@ export function MediaGrid({
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`px-4 py-2 rounded-md text-xs font-bold font-headline transition-all ${
+              className={`px-4 py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer ${
                 activeCategory === cat.id
                   ? 'bg-[#343537] text-[#e3e2e5] border border-[#4d4635]'
                   : 'bg-transparent text-[#99907c] hover:text-[#e3e2e5]'
@@ -75,7 +75,7 @@ export function MediaGrid({
           <select
             value={activeSort}
             onChange={(e) => onSortChange(e.target.value)}
-            className="px-3 py-1.5 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]/50 font-label"
+            className="px-3 py-1.5 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]/50 font-label cursor-pointer"
           >
             <option value="latest">Latest Published</option>
             <option value="rating">Highest Rating</option>
@@ -94,7 +94,7 @@ export function MediaGrid({
           {selectedTag && (
             <button
               onClick={() => onTagChange && onTagChange('')}
-              className="px-3 py-1 rounded-sm bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition-colors"
+              className="px-3 py-1 rounded-sm bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition-colors cursor-pointer"
             >
               Clear Filter ({selectedTag}) ×
             </button>
@@ -103,7 +103,7 @@ export function MediaGrid({
             <button
               key={tag}
               onClick={() => onTagChange && onTagChange(selectedTag === tag ? '' : tag)}
-              className={`px-3 py-1 rounded-sm text-xs font-medium transition-colors shrink-0 ${
+              className={`px-3 py-1 rounded-sm text-xs font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedTag === tag
                   ? 'bg-[#f2ca50] text-[#121315] font-bold'
                   : 'bg-[#1b1c1e] text-[#c6c6c9] hover:text-white border border-[#292a2c]'

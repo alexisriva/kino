@@ -69,7 +69,7 @@ export function LikeDislikeButtons({
       <button
         onClick={() => handleVote('LIKE')}
         disabled={loading}
-        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 ${btnPadding} ${
+        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 cursor-pointer ${btnPadding} ${
           userVote === 'LIKE'
             ? 'bg-[#f2ca50]/20 text-[#f2ca50] border border-[#f2ca50]/50'
             : 'bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-[#f2ca50] border border-[#292a2c]'
@@ -84,7 +84,7 @@ export function LikeDislikeButtons({
       <button
         onClick={() => handleVote('DISLIKE')}
         disabled={loading}
-        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 ${btnPadding} ${
+        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 cursor-pointer ${btnPadding} ${
           userVote === 'DISLIKE'
             ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50'
             : 'bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-rose-400 border border-[#292a2c]'

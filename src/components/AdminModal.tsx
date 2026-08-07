@@ -186,17 +186,17 @@ export function AdminModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto font-label">
       <div className="relative w-full max-w-2xl my-8 p-6 sm:p-8 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl max-h-[90vh] overflow-y-auto">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-5 right-5 text-[#99907c] hover:text-white transition-colors"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
         {/* LOGIN FORM IF NOT AUTHENTICATED */}
         {!isAdmin ? (
-          <div className="max-w-md mx-auto text-center space-y-6 py-4 font-label">
+          <div className="relative max-w-md mx-auto text-center space-y-6 py-4 font-label">
+            <button
+              onClick={onClose}
+              className="absolute -top-2 -right-2 text-[#99907c] hover:text-white p-1 rounded-md transition-colors cursor-pointer"
+              title="Close modal"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
             <div className="w-12 h-12 rounded-md bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30 flex items-center justify-center mx-auto">
               <Lock className="w-6 h-6" />
             </div>
@@ -232,7 +232,7 @@ export function AdminModal({
               <button
                 type="submit"
                 disabled={loginLoading}
-                className="w-full py-2.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all"
+                className="w-full py-2.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer"
               >
                 {loginLoading ? 'Authenticating...' : 'Unlock Admin Portal'}
               </button>
@@ -248,12 +248,25 @@ export function AdminModal({
                   {editingPost ? 'Edit Journal Entry' : 'Publish New Journal Entry'}
                 </h2>
               </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-1 px-3 py-1 rounded-md bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xs font-medium border border-rose-500/30 transition-colors"
-              >
-                <LogOut className="w-3.5 h-3.5" /> Logout
-              </button>
+
+              {/* Header Right Actions: Logout & Close */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xs font-medium border border-rose-500/30 transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-3.5 h-3.5" /> Logout
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer"
+                  title="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
             </div>
 
             {/* OMDb API Auto-Fill Banner */}
@@ -269,7 +282,7 @@ export function AdminModal({
               <button
                 type="button"
                 onClick={() => setShowOmdbSearch(!showOmdbSearch)}
-                className="px-3.5 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shadow-sm shrink-0 hover:bg-[#e9c349] transition-all"
+                className="px-3.5 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shadow-sm shrink-0 hover:bg-[#e9c349] transition-all cursor-pointer"
               >
                 {showOmdbSearch ? 'Close Search' : 'Search OMDb API'}
               </button>
@@ -290,7 +303,7 @@ export function AdminModal({
                   <select
                     value={omdbSearchType}
                     onChange={(e) => setOmdbSearchType(e.target.value)}
-                    className="px-3 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] shrink-0"
+                    className="px-3 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] shrink-0 cursor-pointer"
                   >
                     <option value="">All Types</option>
                     <option value="movie">Movies</option>
@@ -300,7 +313,7 @@ export function AdminModal({
                     type="button"
                     onClick={handleOmdbSearch}
                     disabled={omdbLoading}
-                    className="px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shrink-0 transition-colors"
+                    className="px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shrink-0 transition-colors cursor-pointer"
                   >
                     {omdbLoading ? 'Searching...' : 'Search'}
                   </button>
@@ -336,7 +349,7 @@ export function AdminModal({
                             {item.Year} • {item.Type?.toUpperCase()}
                           </p>
                         </div>
-                        <span className="text-[10px] font-bold text-[#f2ca50] px-2 py-1 bg-[#f2ca50]/10 border border-[#f2ca50]/30 rounded-sm">
+                        <span className="text-[10px] font-bold text-[#f2ca50] px-2 py-1 bg-[#f2ca50]/10 border border-[#f2ca50]/30 rounded-sm cursor-pointer">
                           Import ↓
                         </span>
                       </div>
@@ -370,7 +383,7 @@ export function AdminModal({
                   <select
                     value={mediaType}
                     onChange={(e) => setMediaType(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] cursor-pointer"
                   >
                     <option value="MOVIE">Movie</option>
                     <option value="TV">TV Series</option>
@@ -540,14 +553,14 @@ export function AdminModal({
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2.5 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] text-[#c6c6c9] font-semibold text-xs transition-colors"
+                  className="px-4 py-2.5 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] text-[#c6c6c9] font-semibold text-xs transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-6 py-2.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all"
+                  className="px-6 py-2.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer"
                 >
                   {submitting ? 'Publishing...' : editingPost ? 'Update Entry' : 'Publish Entry'}
                 </button>

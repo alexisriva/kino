@@ -51,7 +51,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
     <>
       <button
         onClick={handleNativeShare}
-        className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-white border border-[#292a2c] text-xs font-semibold font-label transition-all"
+        className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-white border border-[#292a2c] text-xs font-semibold font-label transition-all cursor-pointer"
         title="Share review"
       >
         <Share2 className="w-3.5 h-3.5" />
@@ -63,7 +63,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
           <div className="relative w-full max-w-md p-6 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-[#99907c] hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-[#99907c] hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -86,7 +86,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
                 />
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold text-xs shrink-0 transition-colors"
+                  className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold text-xs shrink-0 transition-colors cursor-pointer"
                 >
                   {copied ? (
                     <>
@@ -105,7 +105,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
                 href={twitterShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] text-[#e3e2e5] border border-[#292a2c] font-semibold text-xs transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] text-[#e3e2e5] border border-[#292a2c] font-semibold text-xs transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4 fill-current text-[#f2ca50]" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />

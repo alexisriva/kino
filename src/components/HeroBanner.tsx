@@ -94,7 +94,7 @@ export function HeroBanner({ post }: HeroBannerProps) {
 
             <Link
               href={`/post/${post.slug}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer"
             >
               <span>Read Full Journal Entry</span>
               <ArrowRight className="w-4 h-4" />

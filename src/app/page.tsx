@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Header } from '@/components/Header';
-import { HeroBanner } from '@/components/HeroBanner';
-import { MediaGrid } from '@/components/MediaGrid';
-import { AdminModal } from '@/components/AdminModal';
-import { getPostsAction, deletePostAction } from '@/actions/postActions';
-import { Plus, Sparkles, RefreshCw } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Header } from "@/components/Header";
+import { HeroBanner } from "@/components/HeroBanner";
+import { MediaGrid } from "@/components/MediaGrid";
+import { AdminModal } from "@/components/AdminModal";
+import { getPostsAction, deletePostAction } from "@/actions/postActions";
+import { Plus, Sparkles, RefreshCw } from "lucide-react";
 
 export default function HomePage() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Filters
-  const [activeCategory, setActiveCategory] = useState('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedTag, setSelectedTag] = useState('');
-  const [activeSort, setActiveSort] = useState('latest');
+  const [activeCategory, setActiveCategory] = useState("ALL");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTag, setSelectedTag] = useState("");
+  const [activeSort, setActiveSort] = useState("latest");
 
   // Admin & Modals
   const [isAdmin, setIsAdmin] = useState(false);
@@ -46,7 +46,7 @@ export default function HomePage() {
   useEffect(() => {
     async function checkAdmin() {
       try {
-        const res = await fetch('/api/admin/check');
+        const res = await fetch("/api/admin/check");
         const data = await res.json();
         setIsAdmin(data.authenticated);
       } catch (err) {
@@ -62,12 +62,12 @@ export default function HomePage() {
   };
 
   const handleDeletePost = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this journal entry?')) return;
+    if (!confirm("Are you sure you want to delete this journal entry?")) return;
     const res = await deletePostAction(id);
     if (res.success) {
       loadPosts();
     } else {
-      alert(res.error || 'Failed to delete post');
+      alert(res.error || "Failed to delete post");
     }
   };
 
@@ -94,14 +94,17 @@ export default function HomePage() {
           <div className="mt-6 p-4 rounded-md bg-[#1b1c1e] border border-[#292a2c] flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-2 text-xs font-bold text-[#f2ca50] font-label">
               <Sparkles className="w-4 h-4 text-[#f2ca50]" />
-              <span>Admin Mode Active — You can now add, edit (✏️), and delete (🗑️) entries directly on each card</span>
+              <span>
+                Admin Mode Active — You can now add, edit (✏️), and delete (🗑️)
+                entries directly on each card
+              </span>
             </div>
             <button
               onClick={() => {
                 setEditingPost(null);
                 setShowAdminModal(true);
               }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shadow-sm transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shadow-sm transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" /> Add New Entry
             </button>
@@ -109,15 +112,19 @@ export default function HomePage() {
         )}
 
         {/* Hero Spotlight (Featured Entry) */}
-        {!loading && featuredPost && !searchQuery && !selectedTag && activeCategory === 'ALL' && (
-          <HeroBanner post={featuredPost} />
-        )}
+        {!loading &&
+          featuredPost &&
+          !searchQuery &&
+          !selectedTag &&
+          activeCategory === "ALL" && <HeroBanner post={featuredPost} />}
 
         {/* Loading Indicator */}
         {loading ? (
           <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-[#99907c]">
             <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
-            <p className="text-xs font-semibold font-label">Loading KINO Journal Entries...</p>
+            <p className="text-xs font-semibold font-label">
+              Loading KINO Journal Entries...
+            </p>
           </div>
         ) : (
           /* Media Grid List */
@@ -152,12 +159,20 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="w-full border-t border-[#292a2c] bg-[#0d0e10] py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#99907c] font-label">
-          <div className="flex items-center gap-2">
-            <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">KINO</span>
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/kino-logo.png"
+              alt="KINO Logo"
+              className="h-6 w-auto object-contain"
+            />
+            <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">
+              KINO
+            </span>
             <span>— Personal Cinema & Media Journal</span>
           </div>
           <p className="text-center sm:text-right">
-            Curated cinema reviews, docs, & series with anonymous voting and social sharing.
+            Curated cinema reviews, docs, & series with anonymous voting and
+            social sharing.
           </p>
         </div>
       </footer>
