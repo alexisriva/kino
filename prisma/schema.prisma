@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Post {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  title         String
+  mediaType     String   @default("MOVIE") // MOVIE, TV, DOCUMENTARY, ANIME
+  releaseYear   Int?
+  genre         String?
+  director      String?
+  cast          String?
+  plot          String?
+  posterUrl     String?
+  imdbRating    String?
+  userRating    Float?   @default(5.0) // 0.5 to 5.0 star scale
+  review        String
+  tags          String?  // comma-separated tags e.g. "SciFi,Masterpiece,MustWatch"
+  likesCount    Int      @default(0)
+  dislikesCount Int      @default(0)
+  isPublished   Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  votes         Vote[]
+}
+
+model Vote {
+  id         String   @id @default(uuid())
+  postId     String
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  voterHash  String   // Hashed (IP + deviceToken)
+  voteType   String   // "LIKE" or "DISLIKE"
+  createdAt  DateTime @default(now())
+
+  @@unique([postId, voterHash])
+}
