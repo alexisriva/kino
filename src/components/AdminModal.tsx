@@ -1,9 +1,19 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { createPostAction, updatePostAction } from '@/actions/postActions';
-import { StarRating } from './StarRating';
-import { X, Lock, ShieldCheck, Search, Plus, Sparkles, LogOut, CheckCircle2, Film } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { createPostAction, updatePostAction } from "@/actions/postActions";
+import { StarRating } from "./StarRating";
+import {
+  X,
+  Lock,
+  ShieldCheck,
+  Search,
+  Plus,
+  Sparkles,
+  LogOut,
+  CheckCircle2,
+  Film,
+} from "lucide-react";
 
 interface AdminModalProps {
   isAdmin: boolean;
@@ -18,60 +28,75 @@ export function AdminModal({
   onClose,
   onAdminStatusChange,
 }: AdminModalProps) {
+  // Prevent background page scrolling when modal is open
+  useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   // Login form state
-  const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
 
   // OMDb Search state
-  const [omdbQuery, setOmdbQuery] = useState('');
-  const [omdbSearchType, setOmdbSearchType] = useState(''); // '' (all), 'movie', 'series'
+  const [omdbQuery, setOmdbQuery] = useState("");
+  const [omdbSearchType, setOmdbSearchType] = useState(""); // '' (all), 'movie', 'series'
   const [omdbResults, setOmdbResults] = useState<any[]>([]);
   const [omdbLoading, setOmdbLoading] = useState(false);
-  const [omdbError, setOmdbError] = useState('');
+  const [omdbError, setOmdbError] = useState("");
   const [showOmdbSearch, setShowOmdbSearch] = useState(false);
 
   // Post form state
-  const [title, setTitle] = useState(editingPost?.title || '');
-  const [mediaType, setMediaType] = useState(editingPost?.mediaType || 'MOVIE');
-  const [releaseYear, setReleaseYear] = useState<number | string>(editingPost?.releaseYear || '');
-  const [genre, setGenre] = useState(editingPost?.genre || '');
-  const [director, setDirector] = useState(editingPost?.director || '');
-  const [cast, setCast] = useState(editingPost?.cast || '');
-  const [plot, setPlot] = useState(editingPost?.plot || '');
-  const [posterUrl, setPosterUrl] = useState(editingPost?.posterUrl || '');
-  const [imdbRating, setImdbRating] = useState(editingPost?.imdbRating || '');
-  const [userRating, setUserRating] = useState<number>(editingPost?.userRating || 5.0);
-  const [review, setReview] = useState(editingPost?.review || '');
-  const [tags, setTags] = useState(editingPost?.tags || '');
-  const [isFeatured, setIsFeatured] = useState(editingPost?.isFeatured || false);
+  const [title, setTitle] = useState(editingPost?.title || "");
+  const [mediaType, setMediaType] = useState(editingPost?.mediaType || "MOVIE");
+  const [releaseYear, setReleaseYear] = useState<number | string>(
+    editingPost?.releaseYear || "",
+  );
+  const [genre, setGenre] = useState(editingPost?.genre || "");
+  const [director, setDirector] = useState(editingPost?.director || "");
+  const [cast, setCast] = useState(editingPost?.cast || "");
+  const [plot, setPlot] = useState(editingPost?.plot || "");
+  const [posterUrl, setPosterUrl] = useState(editingPost?.posterUrl || "");
+  const [imdbRating, setImdbRating] = useState(editingPost?.imdbRating || "");
+  const [userRating, setUserRating] = useState<number>(
+    editingPost?.userRating || 5.0,
+  );
+  const [review, setReview] = useState(editingPost?.review || "");
+  const [tags, setTags] = useState(editingPost?.tags || "");
+  const [isFeatured, setIsFeatured] = useState(
+    editingPost?.isFeatured || false,
+  );
 
-  const [formError, setFormError] = useState('');
-  const [formSuccess, setFormSuccess] = useState('');
+  const [formError, setFormError] = useState("");
+  const [formSuccess, setFormSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   // Handle Admin Login
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginLoading(true);
-    setLoginError('');
+    setLoginError("");
 
     try {
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
       });
       const data = await res.json();
 
       if (data.success) {
         onAdminStatusChange(true);
-        setPassword('');
+        setPassword("");
       } else {
-        setLoginError(data.message || 'Invalid admin password');
+        setLoginError(data.message || "Invalid admin password");
       }
     } catch (err) {
-      setLoginError('Authentication server error');
+      setLoginError("Authentication server error");
     } finally {
       setLoginLoading(false);
     }
@@ -79,7 +104,7 @@ export function AdminModal({
 
   // Handle Admin Logout
   const handleLogout = async () => {
-    await fetch('/api/admin/logout', { method: 'POST' });
+    await fetch("/api/admin/logout", { method: "POST" });
     onAdminStatusChange(false);
     onClose();
   };
@@ -88,12 +113,14 @@ export function AdminModal({
   const handleOmdbSearch = async () => {
     if (!omdbQuery.trim()) return;
     setOmdbLoading(true);
-    setOmdbError('');
+    setOmdbError("");
     setOmdbResults([]);
 
     try {
-      const typeParam = omdbSearchType ? `&type=${omdbSearchType}` : '';
-      const res = await fetch(`/api/omdb/search?title=${encodeURIComponent(omdbQuery)}${typeParam}`);
+      const typeParam = omdbSearchType ? `&type=${omdbSearchType}` : "";
+      const res = await fetch(
+        `/api/omdb/search?title=${encodeURIComponent(omdbQuery)}${typeParam}`,
+      );
       const data = await res.json();
 
       if (data.Search) {
@@ -104,7 +131,7 @@ export function AdminModal({
         setOmdbError(data.error);
       }
     } catch (err) {
-      setOmdbError('Error connecting to OMDb metadata service');
+      setOmdbError("Error connecting to OMDb metadata service");
     } finally {
       setOmdbLoading(false);
     }
@@ -119,18 +146,24 @@ export function AdminModal({
 
       if (item && item.Title) {
         setTitle(item.Title);
-        setReleaseYear(item.Year ? parseInt(item.Year) : '');
-        setGenre(item.Genre !== 'N/A' ? item.Genre : '');
-        setDirector(item.Director !== 'N/A' ? item.Director : '');
-        setCast(item.Actors !== 'N/A' ? item.Actors : '');
-        setPlot(item.Plot !== 'N/A' ? item.Plot : '');
-        setPosterUrl(item.Poster !== 'N/A' ? item.Poster : '');
-        setImdbRating(item.imdbRating !== 'N/A' ? `${item.imdbRating}/10` : '');
-        setMediaType(item.Type === 'series' ? 'TV' : item.Genre?.toLowerCase().includes('documentary') ? 'DOCUMENTARY' : 'MOVIE');
+        setReleaseYear(item.Year ? parseInt(item.Year) : "");
+        setGenre(item.Genre !== "N/A" ? item.Genre : "");
+        setDirector(item.Director !== "N/A" ? item.Director : "");
+        setCast(item.Actors !== "N/A" ? item.Actors : "");
+        setPlot(item.Plot !== "N/A" ? item.Plot : "");
+        setPosterUrl(item.Poster !== "N/A" ? item.Poster : "");
+        setImdbRating(item.imdbRating !== "N/A" ? `${item.imdbRating}/10` : "");
+        setMediaType(
+          item.Type === "series"
+            ? "TV"
+            : item.Genre?.toLowerCase().includes("documentary")
+              ? "DOCUMENTARY"
+              : "MOVIE",
+        );
         setShowOmdbSearch(false);
       }
     } catch (err) {
-      setOmdbError('Failed to fetch item details');
+      setOmdbError("Failed to fetch item details");
     } finally {
       setOmdbLoading(false);
     }
@@ -140,13 +173,13 @@ export function AdminModal({
   const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title || !review) {
-      setFormError('Title and Review content are required');
+      setFormError("Title and Review content are required");
       return;
     }
 
     setSubmitting(true);
-    setFormError('');
-    setFormSuccess('');
+    setFormError("");
+    setFormSuccess("");
 
     const postData = {
       title,
@@ -172,13 +205,17 @@ export function AdminModal({
     }
 
     if (res.success) {
-      setFormSuccess(editingPost ? 'Post updated successfully!' : 'Post published successfully!');
+      setFormSuccess(
+        editingPost
+          ? "Post updated successfully!"
+          : "Post published successfully!",
+      );
       setTimeout(() => {
         onClose();
         window.location.reload();
       }, 1000);
     } else {
-      setFormError(res.error || 'Failed to save post');
+      setFormError(res.error || "Failed to save post");
     }
     setSubmitting(false);
   };
@@ -202,9 +239,12 @@ export function AdminModal({
             </div>
 
             <div>
-              <h2 className="font-headline text-2xl font-bold text-[#e3e2e5]">Admin Credentials Required</h2>
+              <h2 className="font-headline text-2xl font-bold text-[#e3e2e5]">
+                Admin Credentials Required
+              </h2>
               <p className="text-xs text-[#99907c] mt-1">
-                Enter your secret admin password to unlock creation, editing, and publishing rights.
+                Enter your secret admin password to unlock creation, editing,
+                and publishing rights.
               </p>
             </div>
 
@@ -234,7 +274,7 @@ export function AdminModal({
                 disabled={loginLoading}
                 className="w-full py-2.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer"
               >
-                {loginLoading ? 'Authenticating...' : 'Unlock Admin Portal'}
+                {loginLoading ? "Authenticating..." : "Unlock Admin Portal"}
               </button>
             </form>
           </div>
@@ -245,7 +285,9 @@ export function AdminModal({
               <div className="flex items-center gap-2">
                 <ShieldCheck className="w-6 h-6 text-[#f2ca50]" />
                 <h2 className="font-headline text-xl font-bold text-[#e3e2e5]">
-                  {editingPost ? 'Edit Journal Entry' : 'Publish New Journal Entry'}
+                  {editingPost
+                    ? "Edit Journal Entry"
+                    : "Publish New Journal Entry"}
                 </h2>
               </div>
 
@@ -273,10 +315,12 @@ export function AdminModal({
             <div className="p-4 rounded-md bg-[#121315] border border-[#4d4635] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
                 <h4 className="text-xs font-bold text-[#f2ca50] flex items-center gap-1.5 font-headline">
-                  <Sparkles className="w-4 h-4 text-[#f2ca50]" /> Auto-fill Metadata from OMDb API
+                  <Sparkles className="w-4 h-4 text-[#f2ca50]" /> Auto-fill
+                  Metadata from OMDb API
                 </h4>
                 <p className="text-[11px] text-[#99907c] mt-0.5 font-label">
-                  Search movies, TV series, documentaries, or anime to instantly populate title, plot, cast, director, and poster.
+                  Search movies, TV series, documentaries, or anime to instantly
+                  populate title, plot, cast, director, and poster.
                 </p>
               </div>
               <button
@@ -284,7 +328,7 @@ export function AdminModal({
                 onClick={() => setShowOmdbSearch(!showOmdbSearch)}
                 className="px-3.5 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shadow-sm shrink-0 hover:bg-[#e9c349] transition-all cursor-pointer"
               >
-                {showOmdbSearch ? 'Close Search' : 'Search OMDb API'}
+                {showOmdbSearch ? "Close Search" : "Search OMDb API"}
               </button>
             </div>
 
@@ -297,7 +341,10 @@ export function AdminModal({
                     placeholder="Type movie, TV series, or doc title (e.g. Severance, Succession)..."
                     value={omdbQuery}
                     onChange={(e) => setOmdbQuery(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleOmdbSearch())}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" &&
+                      (e.preventDefault(), handleOmdbSearch())
+                    }
                     className="w-full px-3.5 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]"
                   />
                   <select
@@ -315,12 +362,14 @@ export function AdminModal({
                     disabled={omdbLoading}
                     className="px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shrink-0 transition-colors cursor-pointer"
                   >
-                    {omdbLoading ? 'Searching...' : 'Search'}
+                    {omdbLoading ? "Searching..." : "Search"}
                   </button>
                 </div>
 
                 {omdbError && (
-                  <p className="text-xs text-rose-400 font-medium">{omdbError}</p>
+                  <p className="text-xs text-rose-400 font-medium">
+                    {omdbError}
+                  </p>
                 )}
 
                 {omdbResults.length > 0 && (
@@ -331,7 +380,7 @@ export function AdminModal({
                         onClick={() => handleSelectOmdbItem(item.imdbID)}
                         className="flex items-center gap-3 p-2 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] border border-[#292a2c] cursor-pointer transition-colors"
                       >
-                        {item.Poster && item.Poster !== 'N/A' ? (
+                        {item.Poster && item.Poster !== "N/A" ? (
                           <img
                             src={item.Poster}
                             alt={item.Title}
@@ -344,7 +393,9 @@ export function AdminModal({
                           </div>
                         )}
                         <div className="flex-1">
-                          <h5 className="text-xs font-bold text-[#e3e2e5] font-headline">{item.Title}</h5>
+                          <h5 className="text-xs font-bold text-[#e3e2e5] font-headline">
+                            {item.Title}
+                          </h5>
                           <p className="text-[10px] text-[#99907c]">
                             {item.Year} • {item.Type?.toUpperCase()}
                           </p>
@@ -477,12 +528,12 @@ export function AdminModal({
 
               {/* Your Star Rating */}
               <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-md bg-[#121315] border border-[#292a2c]">
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9]">
-                    Your Star Rating: <span className="text-[#f2ca50] font-bold ml-1">{userRating.toFixed(1)} / 5.0</span>
-                  </label>
-                  <p className="text-[10px] text-[#99907c]">Click left half of star for .5, right half for full star</p>
-                </div>
+                <label className="block text-xs font-semibold text-[#c6c6c9]">
+                  Your Star Rating:{" "}
+                  <span className="text-[#f2ca50] font-bold ml-1">
+                    {userRating.toFixed(1)} / 5.0
+                  </span>
+                </label>
                 <StarRating
                   rating={userRating}
                   size="lg"
@@ -502,7 +553,7 @@ export function AdminModal({
                   placeholder="Write your comprehensive analysis, feelings, and review..."
                   value={review}
                   onChange={(e) => setReview(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50] font-journal text-sm leading-relaxed"
+                  className="w-full px-3.5 py-2.5 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50] font-journal leading-relaxed"
                 />
               </div>
 
@@ -529,7 +580,10 @@ export function AdminModal({
                     onChange={(e) => setIsFeatured(e.target.checked)}
                     className="w-4 h-4 accent-[#f2ca50] rounded cursor-pointer"
                   />
-                  <label htmlFor="isFeatured" className="text-xs font-semibold text-[#c6c6c9] cursor-pointer">
+                  <label
+                    htmlFor="isFeatured"
+                    className="text-xs font-semibold text-[#c6c6c9] cursor-pointer"
+                  >
                     Feature on Hero Spotlight
                   </label>
                 </div>
@@ -562,7 +616,11 @@ export function AdminModal({
                   disabled={submitting}
                   className="px-6 py-2.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer"
                 >
-                  {submitting ? 'Publishing...' : editingPost ? 'Update Entry' : 'Publish Entry'}
+                  {submitting
+                    ? "Publishing..."
+                    : editingPost
+                      ? "Update Entry"
+                      : "Publish Entry"}
                 </button>
               </div>
             </form>

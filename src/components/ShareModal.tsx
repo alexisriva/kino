@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Share2, Copy, Check, ExternalLink, X } from 'lucide-react';
 
 interface ShareModalProps {
@@ -11,6 +11,17 @@ interface ShareModalProps {
 export function ShareModal({ title, slug }: ShareModalProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Prevent background scrolling when share modal is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
 
   const getShareUrl = () => {
     if (typeof window !== 'undefined') {

@@ -6,7 +6,10 @@ export const metadata: Metadata = {
   description: "Curated reviews for movies, TV series, documentaries, and anime with anonymous likes, dislikes, and social sharing.",
   keywords: ["kino", "movies", "reviews", "cinema", "tv shows", "documentaries", "letterboxd"],
   icons: {
-    icon: "/kino-logo.png",
+    icon: [
+      { url: "/kino-logo.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
     shortcut: "/kino-logo.png",
     apple: "/kino-logo.png",
   },
@@ -19,6 +22,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full antialiased dark">
+      <head>
+        <link rel="icon" href="/kino-logo.png" type="image/png" />
+      </head>
       <body className="min-h-full flex flex-col bg-[#121315] text-[#e3e2e5]">{children}</body>
     </html>
   );
