@@ -44,13 +44,13 @@ export function StarRating({
         onMouseLeave={() => interactive && setHoverRating(null)}
       >
         {/* Underlay Base Empty Star */}
-        <Star className={`${iconSizes[size]} text-slate-700 fill-slate-800/40`} />
+        <Star className={`${iconSizes[size]} text-[#343537] fill-[#292a2c]`} />
 
         {/* Foreground Star Fill (Full or Half) */}
         {isFull ? (
-          <Star className={`${iconSizes[size]} text-amber-400 fill-amber-400 absolute top-0 left-0`} />
+          <Star className={`${iconSizes[size]} text-[#f2ca50] fill-[#f2ca50] absolute top-0 left-0`} />
         ) : isHalf ? (
-          <StarHalf className={`${iconSizes[size]} text-amber-400 fill-amber-400 absolute top-0 left-0`} />
+          <StarHalf className={`${iconSizes[size]} text-[#f2ca50] fill-[#f2ca50] absolute top-0 left-0`} />
         ) : null}
 
         {/* Interactive Hitboxes (Left half = i - 0.5, Right half = i) */}
@@ -75,9 +75,9 @@ export function StarRating({
   }
 
   return (
-    <div className="flex items-center gap-1.5 select-none">
+    <div className="flex items-center gap-1.5 select-none font-label">
       <div className="flex items-center gap-0.5">{stars}</div>
-      <span className="ml-1 text-xs font-bold text-amber-300">
+      <span className="ml-1 text-xs font-bold text-[#f2ca50]">
         {activeRating > 0 ? activeRating.toFixed(1) : 'NR'}
       </span>
     </div>
