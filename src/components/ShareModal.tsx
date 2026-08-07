@@ -31,8 +31,8 @@ export function ShareModal({ title, slug }: ShareModalProps) {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: `Kino — ${title}`,
-          text: `Check out this review of "${title}" on Kino!`,
+          title: `CINEPHILE — ${title}`,
+          text: `Check out this review of "${title}" on CINEPHILE!`,
           url: url,
         });
       } catch (error) {
@@ -44,49 +44,49 @@ export function ShareModal({ title, slug }: ShareModalProps) {
   };
 
   const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    `Check out this review of "${title}" on Kino!`
+    `Check out this review of "${title}" on CINEPHILE!`
   )}&url=${encodeURIComponent(getShareUrl())}`;
 
   return (
     <>
       <button
         onClick={handleNativeShare}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-cyan-400 border border-slate-700/50 text-xs font-medium transition-all"
+        className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-white border border-[#292a2c] text-xs font-semibold font-label transition-all"
         title="Share review"
       >
-        <Share2 className="w-4 h-4" />
+        <Share2 className="w-3.5 h-3.5" />
         <span>Share</span>
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="relative w-full max-w-md p-6 rounded-2xl glass-modal shadow-2xl border border-slate-700/50 text-slate-100">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className="relative w-full max-w-md p-6 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-[#99907c] hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-lg font-bold mb-1 flex items-center gap-2 text-cyan-400">
+            <h3 className="font-headline text-lg font-bold mb-1 flex items-center gap-2 text-[#f2ca50]">
               <Share2 className="w-5 h-5" /> Share Entry
             </h3>
-            <p className="text-xs text-slate-400 mb-5">
-              Share <strong className="text-slate-200">{title}</strong> with your friends and fellow film lovers.
+            <p className="text-xs text-[#99907c] mb-5 font-label">
+              Share <strong className="text-[#e3e2e5]">{title}</strong> with fellow film lovers.
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-3 font-label">
               {/* Copy Link Input */}
-              <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900/90 border border-slate-800">
+              <div className="flex items-center gap-2 p-1.5 rounded-md bg-[#121315] border border-[#292a2c]">
                 <input
                   type="text"
                   readOnly
                   value={getShareUrl()}
-                  className="w-full px-3 py-1.5 bg-transparent text-xs text-slate-300 focus:outline-none"
+                  className="w-full px-3 py-1.5 bg-transparent text-xs text-[#c6c6c9] focus:outline-none"
                 />
                 <button
                   onClick={handleCopy}
-                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors shrink-0"
+                  className="flex items-center gap-1 px-3.5 py-1.5 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold text-xs shrink-0 transition-colors"
                 >
                   {copied ? (
                     <>
@@ -105,9 +105,9 @@ export function ShareModal({ title, slug }: ShareModalProps) {
                 href={twitterShareUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-sky-600/20 hover:bg-sky-600/30 text-sky-400 border border-sky-500/30 font-medium text-xs transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] text-[#e3e2e5] border border-[#292a2c] font-semibold text-xs transition-colors"
               >
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 fill-current text-[#f2ca50]" viewBox="0 0 24 24">
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
                 Share on X (Twitter)

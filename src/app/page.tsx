@@ -6,7 +6,7 @@ import { HeroBanner } from '@/components/HeroBanner';
 import { MediaGrid } from '@/components/MediaGrid';
 import { AdminModal } from '@/components/AdminModal';
 import { getPostsAction, deletePostAction } from '@/actions/postActions';
-import { Film, Plus, Sparkles, RefreshCw } from 'lucide-react';
+import { Plus, Sparkles, RefreshCw } from 'lucide-react';
 
 export default function HomePage() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -74,7 +74,7 @@ export default function HomePage() {
   const featuredPost = posts.find((p) => p.isFeatured) || posts[0];
 
   return (
-    <div className="min-h-screen bg-[#0b0e14] text-slate-100 flex flex-col selection:bg-emerald-500 selection:text-slate-950">
+    <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Top Header */}
       <Header
         activeCategory={activeCategory}
@@ -91,9 +91,9 @@ export default function HomePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-16">
         {/* Admin Quick Action Floating Bar when logged in */}
         {isAdmin && (
-          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-r from-emerald-950/80 via-slate-900 to-cyan-950/80 border border-emerald-500/50 flex items-center justify-between shadow-xl shadow-emerald-950/30">
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-400">
-              <Sparkles className="w-4 h-4" />
+          <div className="mt-6 p-4 rounded-md bg-[#1b1c1e] border border-[#292a2c] flex items-center justify-between shadow-lg">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#f2ca50] font-label">
+              <Sparkles className="w-4 h-4 text-[#f2ca50]" />
               <span>Admin Mode Active — You can now add, edit (✏️), and delete (🗑️) entries directly on each card</span>
             </div>
             <button
@@ -101,7 +101,7 @@ export default function HomePage() {
                 setEditingPost(null);
                 setShowAdminModal(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shadow-sm transition-all"
             >
               <Plus className="w-4 h-4" /> Add New Entry
             </button>
@@ -115,9 +115,9 @@ export default function HomePage() {
 
         {/* Loading Indicator */}
         {loading ? (
-          <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-slate-500">
-            <RefreshCw className="w-8 h-8 animate-spin text-emerald-400" />
-            <p className="text-xs font-semibold">Loading Kino Journal Entries...</p>
+          <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-[#99907c]">
+            <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
+            <p className="text-xs font-semibold font-label">Loading CINEPHILE Journal Entries...</p>
           </div>
         ) : (
           /* Media Grid List */
@@ -150,11 +150,11 @@ export default function HomePage() {
       )}
 
       {/* Footer */}
-      <footer className="w-full border-t border-slate-800/80 bg-slate-950/60 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <footer className="w-full border-t border-[#292a2c] bg-[#0d0e10] py-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#99907c] font-label">
           <div className="flex items-center gap-2">
-            <Film className="w-4 h-4 text-emerald-400" />
-            <span className="font-bold text-slate-300">KINO</span> — Personal Cinema & Media Journal
+            <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">CINEPHILE</span>
+            <span>— Personal Cinema & Media Journal</span>
           </div>
           <p className="text-center sm:text-right">
             Curated cinema reviews, docs, & series with anonymous voting and social sharing.

@@ -1,47 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Manrope:wght@600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #0b0e14;
-  --foreground: #f1f5f9;
-  --card-bg: #141923;
-  --card-border: rgba(255, 255, 255, 0.08);
-  --accent-green: #00e054;
-  --accent-orange: #ff8000;
-  --accent-cyan: #40c4ff;
+  --background: #121315;
+  --surface-container-lowest: #0d0e10;
+  --surface-container-low: #1b1c1e;
+  --surface-container: #1f2022;
+  --surface-container-high: #292a2c;
+  --surface-container-highest: #343537;
+  --on-surface: #e3e2e5;
+  --on-surface-variant: #d0c5af;
+  --outline: #4d4635;
+  --primary-gold: #f2ca50;
+  --primary-gold-dark: #d4af37;
+  --on-primary: #3c2f00;
+  --secondary: #c6c6c9;
 }
 
 body {
   background-color: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--on-surface);
+  font-family: 'Hanken Grotesk', system-ui, -apple-system, sans-serif;
   overflow-x: hidden;
 }
 
-/* Glassmorphism utility classes */
-.glass-panel {
-  background: rgba(20, 25, 35, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.font-headline {
+  font-family: 'Manrope', system-ui, sans-serif;
 }
 
-.glass-modal {
-  background: rgba(15, 20, 28, 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+.font-journal {
+  font-family: 'Newsreader', Georgia, serif;
 }
 
-.glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(0, 224, 84, 0.3);
+.font-label {
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
 }
 
-.glow-orange {
-  box-shadow: 0 0 25px -5px rgba(255, 128, 0, 0.3);
+/* Editorial Container Cards */
+.editorial-card {
+  background-color: #1b1c1e;
+  border: 1px solid #292a2c;
+  border-radius: 0.5rem;
 }
 
-.glow-cyan {
-  box-shadow: 0 0 25px -5px rgba(64, 196, 255, 0.3);
+.editorial-card:hover {
+  border-color: #3f444a;
+}
+
+/* Primary Muted Gold Button */
+.btn-gold {
+  background-color: #f2ca50;
+  color: #121315;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
+}
+
+.btn-gold:hover {
+  background-color: #e9c349;
+  transform: translateY(-1px);
 }
 
 /* Custom subtle scrollbar */
@@ -51,14 +69,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0e14;
+  background: #0d0e10;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #252d3d;
+  background: #292a2c;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b465c;
+  background: #38393b;
 }

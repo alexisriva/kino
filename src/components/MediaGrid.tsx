@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { MediaCard } from './MediaCard';
-import { SlidersHorizontal, Film, ArrowUpDown, Tag } from 'lucide-react';
+import { Film, ArrowUpDown, Tag } from 'lucide-react';
 
 interface MediaGridProps {
   posts: any[];
@@ -42,9 +42,9 @@ export function MediaGrid({
   return (
     <section className="w-full my-8 space-y-6">
       {/* Filtering & Sorting Toolbar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl glass-panel border border-slate-800/80">
-        {/* Category Pill Tabs */}
-        <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2 border-b border-[#292a2c]">
+        {/* Category Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
           {[
             { id: 'ALL', label: 'All Media' },
             { id: 'MOVIE', label: 'Movies' },
@@ -55,10 +55,10 @@ export function MediaGrid({
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition-all ${
+              className={`px-4 py-2 rounded-md text-xs font-bold font-headline transition-all ${
                 activeCategory === cat.id
-                  ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow-md shadow-emerald-500/20'
-                  : 'bg-slate-900/60 text-slate-400 hover:text-white border border-slate-800'
+                  ? 'bg-[#343537] text-[#e3e2e5] border border-[#4d4635]'
+                  : 'bg-transparent text-[#99907c] hover:text-[#e3e2e5]'
               }`}
             >
               {cat.label}
@@ -67,15 +67,15 @@ export function MediaGrid({
         </div>
 
         {/* Sorting Selection */}
-        <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
-          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
-            <ArrowUpDown className="w-3.5 h-3.5 text-emerald-400" />
+        <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto font-label">
+          <div className="flex items-center gap-1.5 text-xs text-[#99907c] font-medium">
+            <ArrowUpDown className="w-3.5 h-3.5 text-[#f2ca50]" />
             <span>Sort by:</span>
           </div>
           <select
             value={activeSort}
             onChange={(e) => onSortChange(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-emerald-500/50"
+            className="px-3 py-1.5 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]/50 font-label"
           >
             <option value="latest">Latest Published</option>
             <option value="rating">Highest Rating</option>
@@ -87,14 +87,14 @@ export function MediaGrid({
 
       {/* Tag Cloud Filter Bar */}
       {allTags.length > 0 && (
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          <span className="text-[11px] font-semibold text-slate-500 flex items-center gap-1 shrink-0 uppercase tracking-wider">
-            <Tag className="w-3 h-3" /> Tags:
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 font-label">
+          <span className="text-[11px] font-bold text-[#99907c] flex items-center gap-1 shrink-0 uppercase tracking-wider">
+            <Tag className="w-3 h-3 text-[#f2ca50]" /> TAGS:
           </span>
           {selectedTag && (
             <button
               onClick={() => onTagChange && onTagChange('')}
-              className="px-2.5 py-0.5 rounded-md bg-rose-500/20 text-rose-400 border border-rose-500/30 text-[11px] font-semibold transition-colors"
+              className="px-3 py-1 rounded-sm bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition-colors"
             >
               Clear Filter ({selectedTag}) ×
             </button>
@@ -103,10 +103,10 @@ export function MediaGrid({
             <button
               key={tag}
               onClick={() => onTagChange && onTagChange(selectedTag === tag ? '' : tag)}
-              className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium transition-colors shrink-0 ${
+              className={`px-3 py-1 rounded-sm text-xs font-medium transition-colors shrink-0 ${
                 selectedTag === tag
-                  ? 'bg-emerald-500 text-slate-950 font-bold'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800'
+                  ? 'bg-[#f2ca50] text-[#121315] font-bold'
+                  : 'bg-[#1b1c1e] text-[#c6c6c9] hover:text-white border border-[#292a2c]'
               }`}
             >
               #{tag}
@@ -117,7 +117,7 @@ export function MediaGrid({
 
       {/* Grid List */}
       {posts.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {posts.map((post) => (
             <MediaCard
               key={post.id}
@@ -129,10 +129,10 @@ export function MediaGrid({
           ))}
         </div>
       ) : (
-        <div className="w-full p-12 text-center rounded-3xl glass-panel border border-slate-800/80 my-8">
-          <Film className="w-12 h-12 text-slate-600 mx-auto mb-3 stroke-[1.5]" />
-          <h3 className="text-lg font-bold text-slate-300">No Journal Entries Found</h3>
-          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+        <div className="w-full p-12 text-center rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-8">
+          <Film className="w-12 h-12 text-[#99907c] mx-auto mb-3 stroke-[1.5]" />
+          <h3 className="text-lg font-bold text-[#e3e2e5]">No Journal Entries Found</h3>
+          <p className="text-xs text-[#99907c] mt-1 max-w-sm mx-auto">
             Try adjusting your search query, clearing tag filters, or selecting a different media category.
           </p>
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ThumbsUp, ThumbsDown, Sparkles } from 'lucide-react';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
 import { toggleVoteAction, getUserVoteStatusAction } from '@/actions/postActions';
 import { getOrCreateDeviceToken } from '@/lib/deviceToken';
 import confetti from 'canvas-confetti';
@@ -49,10 +49,10 @@ export function LikeDislikeButtons({
 
       if (res.userVote === 'LIKE') {
         confetti({
-          particleCount: 50,
-          spread: 60,
+          particleCount: 40,
+          spread: 50,
           origin: { y: 0.8 },
-          colors: ['#00e054', '#40c4ff', '#ff8000'],
+          colors: ['#f2ca50', '#d4af37', '#e3e2e5'],
         });
       }
     }
@@ -60,23 +60,23 @@ export function LikeDislikeButtons({
     setLoading(false);
   };
 
-  const btnPadding = size === 'sm' ? 'px-2.5 py-1 text-xs' : size === 'lg' ? 'px-4 py-2.5 text-sm font-semibold' : 'px-3 py-1.5 text-xs font-medium';
-  const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : size === 'lg' ? 'w-5 h-5' : 'w-4 h-4';
+  const btnPadding = size === 'sm' ? 'px-2.5 py-1 text-xs' : size === 'lg' ? 'px-4 py-2 text-sm font-semibold' : 'px-3 py-1.5 text-xs font-medium';
+  const iconSize = size === 'sm' ? 'w-3.5 h-3.5' : size === 'lg' ? 'w-4 h-4' : 'w-3.5 h-3.5';
 
   return (
-    <div className="inline-flex items-center gap-2">
+    <div className="inline-flex items-center gap-2 font-label">
       {/* Like Button */}
       <button
         onClick={() => handleVote('LIKE')}
         disabled={loading}
-        className={`flex items-center gap-1.5 rounded-full transition-all duration-200 ${btnPadding} ${
+        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 ${btnPadding} ${
           userVote === 'LIKE'
-            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 shadow-sm shadow-emerald-500/20'
-            : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-emerald-400 border border-slate-700/50'
+            ? 'bg-[#f2ca50]/20 text-[#f2ca50] border border-[#f2ca50]/50'
+            : 'bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-[#f2ca50] border border-[#292a2c]'
         }`}
         title="Like entry"
       >
-        <ThumbsUp className={`${iconSize} ${userVote === 'LIKE' ? 'fill-emerald-400' : ''}`} />
+        <ThumbsUp className={`${iconSize} ${userVote === 'LIKE' ? 'fill-[#f2ca50]' : ''}`} />
         <span>{likes}</span>
       </button>
 
@@ -84,10 +84,10 @@ export function LikeDislikeButtons({
       <button
         onClick={() => handleVote('DISLIKE')}
         disabled={loading}
-        className={`flex items-center gap-1.5 rounded-full transition-all duration-200 ${btnPadding} ${
+        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 ${btnPadding} ${
           userVote === 'DISLIKE'
-            ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50 shadow-sm shadow-rose-500/20'
-            : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700/80 hover:text-rose-400 border border-slate-700/50'
+            ? 'bg-rose-500/20 text-rose-400 border border-rose-500/50'
+            : 'bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-rose-400 border border-[#292a2c]'
         }`}
         title="Dislike entry"
       >

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Film, ShieldCheck, Lock, Search } from 'lucide-react';
+import { ShieldCheck, Lock, Search } from 'lucide-react';
 
 interface HeaderProps {
   activeCategory?: string;
@@ -21,61 +21,27 @@ export function Header({
   isAdmin = false,
   onOpenAdminModal,
 }: HeaderProps) {
-  const categories = [
-    { id: 'ALL', label: 'All' },
-    { id: 'MOVIE', label: 'Movies' },
-    { id: 'TV', label: 'TV Series' },
-    { id: 'DOCUMENTARY', label: 'Docs' },
-    { id: 'ANIME', label: 'Anime' },
-  ];
-
   return (
-    <header className="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 via-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-            <Film className="w-5 h-5 text-slate-950 font-bold" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-black tracking-tight text-white flex items-center gap-1">
-              KINO
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            </span>
-            <span className="text-[10px] uppercase font-semibold text-slate-400 tracking-wider -mt-1">
-              Journal
-            </span>
-          </div>
+    <header className="sticky top-0 z-40 w-full bg-[#121315]/95 backdrop-blur-md border-b border-[#292a2c]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-6">
+        {/* CINEPHILE Brand Title */}
+        <Link href="/" className="flex items-center gap-2 group shrink-0">
+          <span className="font-headline text-3xl sm:text-4xl font-extrabold tracking-tight text-[#f2ca50] group-hover:text-[#e9c349] transition-colors">
+            CINEPHILE
+          </span>
         </Link>
 
-        {/* Categories Bar */}
-        <nav className="hidden md:flex items-center gap-1 bg-slate-900/60 p-1 rounded-xl border border-slate-800/60">
-          {categories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => onCategoryChange && onCategoryChange(cat.id)}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeCategory === cat.id
-                  ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
-                  : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </nav>
-
         {/* Search & Admin Control */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           {onSearchChange && (
-            <div className="relative w-40 sm:w-56">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <div className="relative w-48 sm:w-72">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#99907c]" />
               <input
                 type="text"
                 placeholder="Search entries..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 transition-colors"
+                className="w-full pl-10 pr-4 py-2 rounded-lg bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]/60 transition-colors font-label"
               />
             </div>
           )}
@@ -83,18 +49,18 @@ export function Header({
           {isAdmin ? (
             <button
               onClick={() => onOpenAdminModal && onOpenAdminModal()}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 text-xs font-semibold transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/40 hover:bg-[#f2ca50]/20 text-xs font-bold font-headline transition-colors"
             >
               <ShieldCheck className="w-4 h-4" />
-              <span className="hidden sm:inline">Admin Mode</span>
+              <span>Admin Mode</span>
             </button>
           ) : (
             <button
               onClick={() => onOpenAdminModal && onOpenAdminModal()}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800 text-xs font-medium transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1b1c1e] hover:bg-[#292a2c] text-[#c6c6c9] border border-[#292a2c] text-xs font-semibold font-headline transition-colors"
             >
               <Lock className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Admin Access</span>
+              <span>Admin Access</span>
             </button>
           )}
         </div>
