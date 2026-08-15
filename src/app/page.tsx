@@ -159,7 +159,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#99907c] font-label">
           <div className="flex items-center gap-2.5">
             <img
-              src="/kino-logo.png"
+              src="/logo.png"
               alt="KINO Logo"
               className="h-6 w-auto object-contain"
             />

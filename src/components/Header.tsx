@@ -36,7 +36,7 @@ export function Header({
             className="flex items-end gap-3 group shrink-0 cursor-pointer"
           >
             <img
-              src="/kino-logo.png"
+              src="/logo.png"
               alt="KINO Logo"
               className="h-10 sm:h-12 w-auto object-contain transition-transform group-hover:scale-105"
             />
