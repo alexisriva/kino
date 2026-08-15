@@ -68,7 +68,7 @@ describe('WatchlistGrid', () => {
     mockSearchParams = new URLSearchParams()
     vi.mocked(getWatchlistAction).mockResolvedValue({
       success: true,
-      items: mockItems,
+      items: mockItems as any,
       unwatchedCount: 2,
       watchedCount: 5,
     })

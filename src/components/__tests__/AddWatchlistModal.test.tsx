@@ -153,7 +153,7 @@ describe('AddWatchlistModal', () => {
   });
 
   it('displays fallback error message when addToWatchlistAction fails without error message', async () => {
-    vi.mocked(addToWatchlistAction).mockResolvedValueOnce({ success: false });
+    vi.mocked(addToWatchlistAction).mockResolvedValueOnce({ success: false, error: '' } as any);
 
     render(<AddWatchlistModal onClose={mockOnClose} onAdded={mockOnAdded} />);
 
