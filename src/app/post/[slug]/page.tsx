@@ -50,8 +50,8 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
   const isFromWatchlist = from === 'watchlist';
   const backTargetUrl = isFromWatchlist
     ? tab
-      ? `/?view=watchlist&tab=${tab}`
-      : '/?view=watchlist&tab=watched'
+      ? `/watchlist?tab=${tab}`
+      : '/watchlist?tab=watched'
     : '/';
 
   return (

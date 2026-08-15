@@ -12,11 +12,13 @@ import { BookmarkPlus, Film, RefreshCw, Eye, EyeOff } from 'lucide-react';
 
 interface WatchlistGridProps {
   isAdmin?: boolean;
+  searchQuery?: string;
   onLogReviewFromWatchlist?: (item: any) => void;
 }
 
 export function WatchlistGrid({
   isAdmin = false,
+  searchQuery = '',
   onLogReviewFromWatchlist,
 }: WatchlistGridProps) {
   const searchParams = useSearchParams();
@@ -31,7 +33,6 @@ export function WatchlistGrid({
 
   // Filters
   const [activeCategory, setActiveCategory] = useState('ALL');
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Counts
   const [unwatchedCount, setUnwatchedCount] = useState(0);
@@ -42,9 +43,13 @@ export function WatchlistGrid({
 
   const handleTabChange = (watched: boolean) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set('view', 'watchlist');
-    params.set('tab', watched ? 'watched' : 'queued');
-    router.replace(`/?${params.toString()}`);
+    if (watched) {
+      params.set('tab', 'watched');
+    } else {
+      params.delete('tab');
+    }
+    const query = params.toString();
+    router.replace(query ? `/watchlist?${query}` : '/watchlist');
   };
 
   const loadWatchlist = async () => {

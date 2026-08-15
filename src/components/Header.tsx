@@ -1,29 +1,31 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ShieldCheck, Lock, Search, Film, BookmarkPlus } from "lucide-react";
 
 interface HeaderProps {
-  activeCategory?: string;
-  onCategoryChange?: (category: string) => void;
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   isAdmin?: boolean;
   onOpenAdminModal?: () => void;
   currentView?: "journal" | "watchlist";
-  onViewChange?: (view: "journal" | "watchlist") => void;
 }
 
 export function Header({
-  activeCategory = "ALL",
-  onCategoryChange,
   searchQuery = "",
   onSearchChange,
   isAdmin = false,
   onOpenAdminModal,
-  currentView = "journal",
-  onViewChange,
+  currentView,
 }: HeaderProps) {
+  const pathname = usePathname();
+
+  // If currentView is explicitly provided (e.g. on post detail page), use it;
+  // otherwise determine from the active route pathname.
+  const isWatchlist = currentView ? currentView === "watchlist" : pathname?.startsWith("/watchlist");
+  const isJournal = currentView ? currentView === "journal" : !isWatchlist;
+
   return (
     <header className="sticky top-0 z-40 w-full bg-[#121315]/95 backdrop-blur-md border-b border-[#292a2c]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4 sm:gap-6">
@@ -31,12 +33,6 @@ export function Header({
         <div className="flex items-center gap-6 sm:gap-8">
           <Link
             href="/"
-            onClick={(e) => {
-              if (onViewChange) {
-                e.preventDefault();
-                onViewChange("journal");
-              }
-            }}
             className="flex items-end gap-3 group shrink-0 cursor-pointer"
           >
             <img
@@ -49,36 +45,32 @@ export function Header({
             </span>
           </Link>
 
-          {/* View Nav Pills: Journal vs Watchlist */}
-          {onViewChange && (
-            <nav className="flex items-center gap-1.5 p-1 rounded-lg bg-[#1b1c1e] border border-[#292a2c]">
-              <button
-                type="button"
-                onClick={() => onViewChange("journal")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold font-headline transition-all cursor-pointer ${
-                  currentView === "journal"
-                    ? "bg-[#f2ca50] text-[#121315] shadow-sm"
-                    : "text-[#99907c] hover:text-[#e3e2e5]"
-                }`}
-              >
-                <Film className="w-3.5 h-3.5" />
-                <span>Journal</span>
-              </button>
+          {/* View Nav Links: Journal vs Watchlist */}
+          <nav className="flex items-center gap-1.5 p-1 rounded-lg bg-[#1b1c1e] border border-[#292a2c]">
+            <Link
+              href="/"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold font-headline transition-all cursor-pointer ${
+                isJournal
+                  ? "bg-[#f2ca50] text-[#121315] shadow-sm"
+                  : "text-[#99907c] hover:text-[#e3e2e5]"
+              }`}
+            >
+              <Film className="w-3.5 h-3.5" />
+              <span>Journal</span>
+            </Link>
 
-              <button
-                type="button"
-                onClick={() => onViewChange("watchlist")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold font-headline transition-all cursor-pointer ${
-                  currentView === "watchlist"
-                    ? "bg-[#f2ca50] text-[#121315] shadow-sm"
-                    : "text-[#99907c] hover:text-[#e3e2e5]"
-                }`}
-              >
-                <BookmarkPlus className="w-3.5 h-3.5" />
-                <span>Watchlist</span>
-              </button>
-            </nav>
-          )}
+            <Link
+              href="/watchlist"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold font-headline transition-all cursor-pointer ${
+                isWatchlist
+                  ? "bg-[#f2ca50] text-[#121315] shadow-sm"
+                  : "text-[#99907c] hover:text-[#e3e2e5]"
+              }`}
+            >
+              <BookmarkPlus className="w-3.5 h-3.5" />
+              <span>Watchlist</span>
+            </Link>
+          </nav>
         </div>
 
         {/* Search & Admin Control */}
@@ -88,7 +80,7 @@ export function Header({
               <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#99907c]" />
               <input
                 type="text"
-                placeholder={currentView === "journal" ? "Search reviews..." : "Search watchlist..."}
+                placeholder={isWatchlist ? "Search watchlist..." : "Search reviews..."}
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 rounded-lg bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]/60 transition-colors font-label"

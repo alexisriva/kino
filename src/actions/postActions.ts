@@ -174,6 +174,7 @@ export async function createPostAction(data: {
     }
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     revalidatePath(`/post/${post.slug}`);
     return { success: true, post };
   } catch (error: any) {
@@ -236,6 +237,7 @@ export async function updatePostAction(
     }
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     revalidatePath(`/post/${post.slug}`);
     return { success: true, post };
   } catch (error: any) {
@@ -255,6 +257,7 @@ export async function deletePostAction(id: string) {
     });
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     return { success: true, message: 'Post deleted successfully' };
   } catch (error: any) {
     return { success: false, error: error.message || 'Failed to delete post' };
@@ -340,6 +343,7 @@ export async function toggleVoteAction(
     }
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     revalidatePath(`/post/${currentPost.slug}`);
 
     return {

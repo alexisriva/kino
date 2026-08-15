@@ -71,6 +71,7 @@ export async function syncAllPostsToWatchlistAction() {
     }
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     return {
       success: true,
       message: `Sync complete: ${createdCount} created, ${linkedCount} updated.`,
@@ -175,6 +176,7 @@ export async function addToWatchlistAction(input: AddWatchlistInput) {
     });
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     return { success: true, item };
   } catch (error: any) {
     console.error('Error adding to watchlist:', error);
@@ -195,6 +197,7 @@ export async function deleteWatchlistItemAction(id: string) {
     });
 
     revalidatePath('/');
+    revalidatePath('/watchlist');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting watchlist item:', error);
