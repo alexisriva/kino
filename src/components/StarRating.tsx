@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { Star, StarHalf } from 'lucide-react';
+import { useState } from "react";
+import { Star, StarHalf } from "lucide-react";
 
 interface StarRatingProps {
   rating: number; // 0.5 to 5.0
   maxRating?: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   interactive?: boolean;
   onChange?: (rating: number) => void;
 }
@@ -14,7 +14,7 @@ interface StarRatingProps {
 export function StarRating({
   rating,
   maxRating = 5,
-  size = 'md',
+  size = "md",
   interactive = false,
   onChange,
 }: StarRatingProps) {
@@ -23,9 +23,9 @@ export function StarRating({
   const activeRating = hoverRating !== null ? hoverRating : rating;
 
   const iconSizes = {
-    sm: 'w-3.5 h-3.5',
-    md: 'w-4 h-4',
-    lg: 'w-6 h-6',
+    sm: "w-3.5 h-3.5",
+    md: "w-4 h-4",
+    lg: "w-6 h-6",
   };
 
   const stars = [];
@@ -40,7 +40,7 @@ export function StarRating({
     stars.push(
       <div
         key={i}
-        className={`relative inline-flex items-center ${interactive ? 'cursor-pointer' : ''}`}
+        className={`relative inline-flex items-center ${interactive ? "cursor-pointer" : ""}`}
         onMouseLeave={() => interactive && setHoverRating(null)}
       >
         {/* Underlay Base Empty Star */}
@@ -48,9 +48,13 @@ export function StarRating({
 
         {/* Foreground Star Fill (Full or Half) */}
         {isFull ? (
-          <Star className={`${iconSizes[size]} text-[#f2ca50] fill-[#f2ca50] absolute top-0 left-0`} />
+          <Star
+            className={`${iconSizes[size]} text-[#f2ca50] fill-[#f2ca50] absolute top-0 left-0`}
+          />
         ) : isHalf ? (
-          <StarHalf className={`${iconSizes[size]} text-[#f2ca50] fill-[#f2ca50] absolute top-0 left-0`} />
+          <StarHalf
+            className={`${iconSizes[size]} text-[#f2ca50] fill-[#f2ca50] absolute top-0 left-0`}
+          />
         ) : null}
 
         {/* Interactive Hitboxes (Left half = i - 0.5, Right half = i) */}
@@ -70,7 +74,7 @@ export function StarRating({
             />
           </div>
         )}
-      </div>
+      </div>,
     );
   }
 
@@ -78,7 +82,7 @@ export function StarRating({
     <div className="flex items-center gap-1.5 select-none font-label">
       <div className="flex items-center gap-0.5">{stars}</div>
       <span className="ml-1 text-xs font-bold text-[#f2ca50]">
-        {activeRating > 0 ? activeRating.toFixed(1) : 'NR'}
+        {activeRating > 0 ? activeRating.toFixed(1) : "NR"}
       </span>
     </div>
   );

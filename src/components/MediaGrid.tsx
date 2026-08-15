@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { MediaCard } from './MediaCard';
-import { Film, ArrowUpDown, Tag } from 'lucide-react';
+import { MediaCard } from "./MediaCard";
+import { Film, ArrowUpDown, Tag } from "lucide-react";
 
 interface MediaGridProps {
   posts: any[];
@@ -33,10 +32,10 @@ export function MediaGrid({
   const allTags = Array.from(
     new Set(
       posts
-        .flatMap((p) => (p.tags ? p.tags.split(',') : []))
+        .flatMap((p) => (p.tags ? p.tags.split(",") : []))
         .map((t) => t.trim())
-        .filter(Boolean)
-    )
+        .filter(Boolean),
+    ),
   );
 
   return (
@@ -46,19 +45,19 @@ export function MediaGrid({
         {/* Category Pills */}
         <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
           {[
-            { id: 'ALL', label: 'All Media' },
-            { id: 'MOVIE', label: 'Movies' },
-            { id: 'TV', label: 'TV Series' },
-            { id: 'DOCUMENTARY', label: 'Documentaries' },
-            { id: 'ANIME', label: 'Anime' },
+            { id: "ALL", label: "All Media" },
+            { id: "MOVIE", label: "Movies" },
+            { id: "TV", label: "TV Series" },
+            { id: "DOCUMENTARY", label: "Documentaries" },
+            { id: "ANIME", label: "Anime" },
           ].map((cat) => (
             <button
               key={cat.id}
               onClick={() => onCategoryChange(cat.id)}
               className={`px-4 py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer ${
                 activeCategory === cat.id
-                  ? 'bg-[#343537] text-[#e3e2e5] border border-[#4d4635]'
-                  : 'bg-transparent text-[#99907c] hover:text-[#e3e2e5]'
+                  ? "bg-[#343537] text-[#e3e2e5] border border-[#4d4635]"
+                  : "bg-transparent text-[#99907c] hover:text-[#e3e2e5]"
               }`}
             >
               {cat.label}
@@ -93,7 +92,7 @@ export function MediaGrid({
           </span>
           {selectedTag && (
             <button
-              onClick={() => onTagChange && onTagChange('')}
+              onClick={() => onTagChange && onTagChange("")}
               className="px-3 py-1 rounded-sm bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-semibold transition-colors cursor-pointer"
             >
               Clear Filter ({selectedTag}) ×
@@ -102,11 +101,13 @@ export function MediaGrid({
           {allTags.map((tag) => (
             <button
               key={tag}
-              onClick={() => onTagChange && onTagChange(selectedTag === tag ? '' : tag)}
+              onClick={() =>
+                onTagChange && onTagChange(selectedTag === tag ? "" : tag)
+              }
               className={`px-3 py-1 rounded-sm text-xs font-medium transition-colors shrink-0 cursor-pointer ${
                 selectedTag === tag
-                  ? 'bg-[#f2ca50] text-[#121315] font-bold'
-                  : 'bg-[#1b1c1e] text-[#c6c6c9] hover:text-white border border-[#292a2c]'
+                  ? "bg-[#f2ca50] text-[#121315] font-bold"
+                  : "bg-[#1b1c1e] text-[#c6c6c9] hover:text-white border border-[#292a2c]"
               }`}
             >
               #{tag}
@@ -131,9 +132,12 @@ export function MediaGrid({
       ) : (
         <div className="w-full p-12 text-center rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-8">
           <Film className="w-12 h-12 text-[#99907c] mx-auto mb-3 stroke-[1.5]" />
-          <h3 className="text-lg font-bold text-[#e3e2e5]">No Journal Entries Found</h3>
+          <h3 className="text-lg font-bold text-[#e3e2e5]">
+            No Journal Entries Found
+          </h3>
           <p className="text-xs text-[#99907c] mt-1 max-w-sm mx-auto">
-            Try adjusting your search query, clearing tag filters, or selecting a different media category.
+            Try adjusting your search query, clearing tag filters, or selecting
+            a different media category.
           </p>
         </div>
       )}

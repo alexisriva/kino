@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { Film, Edit3, Trash2, ArrowRight } from 'lucide-react';
+import Link from "next/link";
+import { Film, Edit3, Trash2, ArrowRight } from "lucide-react";
 
 interface WatchlistCardProps {
   item: {
@@ -51,7 +50,7 @@ export function WatchlistCard({
       )}
 
       {/* Poster Aspect Ratio Frame */}
-      <div className="relative aspect-[2/3] w-full overflow-hidden bg-[#0d0e10]">
+      <div className="relative aspect-2/3 w-full overflow-hidden bg-[#0d0e10]">
         {item.posterUrl ? (
           <img
             src={item.posterUrl}
@@ -63,7 +62,9 @@ export function WatchlistCard({
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-[#99907c] bg-[#0d0e10]">
             <Film className="w-12 h-12 mb-2 stroke-[1.5]" />
-            <span className="text-xs font-semibold text-center">{item.title}</span>
+            <span className="text-xs font-semibold text-center">
+              {item.title}
+            </span>
           </div>
         )}
 
@@ -75,11 +76,11 @@ export function WatchlistCard({
           <span
             className={`px-2 py-0.5 rounded-sm text-[10px] font-bold border uppercase tracking-wider ${
               item.isWatched
-                ? 'bg-[#f2ca50]/20 text-[#f2ca50] border-[#f2ca50]/40'
-                : 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40'
+                ? "bg-[#f2ca50]/20 text-[#f2ca50] border-[#f2ca50]/40"
+                : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
             }`}
           >
-            {item.isWatched ? 'Watched' : 'Queued'}
+            {item.isWatched ? "Watched" : "Queued"}
           </span>
         </div>
       </div>
@@ -92,13 +93,18 @@ export function WatchlistCard({
               {item.title}
             </h4>
             {item.releaseYear && (
-              <span className="text-xs font-semibold text-[#99907c]">{item.releaseYear}</span>
+              <span className="text-xs font-semibold text-[#99907c]">
+                {item.releaseYear}
+              </span>
             )}
           </div>
 
           {item.director && (
             <p className="text-[11px] text-[#99907c] mt-0.5 line-clamp-1">
-              by <span className="text-[#e3e2e5] font-medium">{item.director}</span>
+              by{" "}
+              <span className="text-[#e3e2e5] font-medium">
+                {item.director}
+              </span>
             </p>
           )}
 
@@ -118,7 +124,9 @@ export function WatchlistCard({
             >
               <span>Read Review</span>
               {item.post.userRating && (
-                <span className="text-amber-400 font-bold ml-1">★ {item.post.userRating.toFixed(1)}</span>
+                <span className="text-amber-400 font-bold ml-1">
+                  ★ {item.post.userRating.toFixed(1)}
+                </span>
               )}
               <ArrowRight className="w-3.5 h-3.5 ml-auto" />
             </Link>

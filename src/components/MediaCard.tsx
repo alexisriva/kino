@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { LikeDislikeButtons } from './LikeDislikeButtons';
-import { ShareModal } from './ShareModal';
-import { Film, Edit3, Trash2 } from 'lucide-react';
+import Link from "next/link";
+import { LikeDislikeButtons } from "./LikeDislikeButtons";
+import { ShareModal } from "./ShareModal";
+import { Film, Edit3, Trash2 } from "lucide-react";
 
 interface MediaCardProps {
   post: {
@@ -28,8 +27,13 @@ interface MediaCardProps {
   onDelete?: (id: string) => void;
 }
 
-export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCardProps) {
-  const tagsList = post.tags ? post.tags.split(',').filter(Boolean) : [];
+export function MediaCard({
+  post,
+  isAdmin = false,
+  onEdit,
+  onDelete,
+}: MediaCardProps) {
+  const tagsList = post.tags ? post.tags.split(",").filter(Boolean) : [];
 
   return (
     <div className="group relative flex flex-col rounded-md bg-[#1b1c1e] border border-[#292a2c] overflow-hidden hover:border-[#4d4635] transition-all duration-300">
@@ -64,7 +68,10 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
       )}
 
       {/* Poster Aspect Ratio Frame */}
-      <Link href={`/post/${post.slug}`} className="relative aspect-[2/3] w-full overflow-hidden bg-[#0d0e10] cursor-pointer">
+      <Link
+        href={`/post/${post.slug}`}
+        className="relative aspect-2/3 w-full overflow-hidden bg-[#0d0e10] cursor-pointer"
+      >
         {post.posterUrl ? (
           <img
             src={post.posterUrl}
@@ -76,7 +83,9 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center p-4 text-[#99907c] bg-[#0d0e10]">
             <Film className="w-12 h-12 mb-2 stroke-[1.5]" />
-            <span className="text-xs font-semibold text-center">{post.title}</span>
+            <span className="text-xs font-semibold text-center">
+              {post.title}
+            </span>
           </div>
         )}
 
@@ -104,13 +113,18 @@ export function MediaCard({ post, isAdmin = false, onEdit, onDelete }: MediaCard
               {post.title}
             </Link>
             {post.releaseYear && (
-              <span className="text-xs font-semibold text-[#99907c] font-label">{post.releaseYear}</span>
+              <span className="text-xs font-semibold text-[#99907c] font-label">
+                {post.releaseYear}
+              </span>
             )}
           </div>
 
           {post.director && (
             <p className="text-[11px] text-[#99907c] mt-0.5 line-clamp-1 font-label">
-              by <span className="text-[#e3e2e5] font-medium">{post.director}</span>
+              by{" "}
+              <span className="text-[#e3e2e5] font-medium">
+                {post.director}
+              </span>
             </p>
           )}
 

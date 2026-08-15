@@ -1,10 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import { StarRating } from './StarRating';
-import { LikeDislikeButtons } from './LikeDislikeButtons';
-import { ArrowRight, Star } from 'lucide-react';
+import Link from "next/link";
+import { StarRating } from "./StarRating";
+import { LikeDislikeButtons } from "./LikeDislikeButtons";
+import { ArrowRight, Star } from "lucide-react";
 
 interface HeroBannerProps {
   post: {
@@ -29,7 +28,7 @@ export function HeroBanner({ post }: HeroBannerProps) {
       <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
         {/* Poster Image Container */}
         {post.posterUrl && (
-          <div className="relative shrink-0 w-full sm:w-72 md:w-80 aspect-[2/3] overflow-hidden rounded-md bg-[#121315] border border-[#292a2c]">
+          <div className="relative shrink-0 w-full sm:w-72 md:w-80 aspect-2/3 overflow-hidden rounded-md bg-[#121315] border border-[#292a2c]">
             <img
               src={post.posterUrl}
               alt={post.title}
@@ -49,7 +48,9 @@ export function HeroBanner({ post }: HeroBannerProps) {
               {post.mediaType}
             </span>
             {post.releaseYear && (
-              <span className="text-xs font-semibold text-[#99907c] font-label">({post.releaseYear})</span>
+              <span className="text-xs font-semibold text-[#99907c] font-label">
+                ({post.releaseYear})
+              </span>
             )}
           </div>
 
@@ -62,12 +63,18 @@ export function HeroBanner({ post }: HeroBannerProps) {
             <div className="text-xs text-[#99907c] space-y-1 font-label">
               {post.director && (
                 <p>
-                  <strong className="text-[#e3e2e5] font-semibold">Director:</strong> {post.director}
+                  <strong className="text-[#e3e2e5] font-semibold">
+                    Director:
+                  </strong>{" "}
+                  {post.director}
                 </p>
               )}
               {post.cast && (
                 <p className="line-clamp-1">
-                  <strong className="text-[#e3e2e5] font-semibold">Cast:</strong> {post.cast}
+                  <strong className="text-[#e3e2e5] font-semibold">
+                    Cast:
+                  </strong>{" "}
+                  {post.cast}
                 </p>
               )}
             </div>
@@ -80,7 +87,7 @@ export function HeroBanner({ post }: HeroBannerProps) {
 
           {/* Review Excerpt in Newsreader Serif */}
           <p className="font-journal text-lg text-[#d0c5af] leading-relaxed line-clamp-3 italic">
-            "{post.review.replace(/[#*`_]/g, '')}"
+            "{post.review.replace(/[#*`_]/g, "")}"
           </p>
 
           {/* Actions & Likes */}

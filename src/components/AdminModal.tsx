@@ -7,8 +7,6 @@ import {
   X,
   Lock,
   ShieldCheck,
-  Search,
-  Plus,
   Sparkles,
   LogOut,
   CheckCircle2,
@@ -54,17 +52,33 @@ export function AdminModal({
   const [showOmdbSearch, setShowOmdbSearch] = useState(false);
 
   // Post form state initialized from editingPost OR watchlistItem
-  const [title, setTitle] = useState(editingPost?.title || watchlistItem?.title || "");
-  const [mediaType, setMediaType] = useState(editingPost?.mediaType || watchlistItem?.mediaType || "MOVIE");
+  const [title, setTitle] = useState(
+    editingPost?.title || watchlistItem?.title || "",
+  );
+  const [mediaType, setMediaType] = useState(
+    editingPost?.mediaType || watchlistItem?.mediaType || "MOVIE",
+  );
   const [releaseYear, setReleaseYear] = useState<number | string>(
     editingPost?.releaseYear || watchlistItem?.releaseYear || "",
   );
-  const [genre, setGenre] = useState(editingPost?.genre || watchlistItem?.genre || "");
-  const [director, setDirector] = useState(editingPost?.director || watchlistItem?.director || "");
-  const [cast, setCast] = useState(editingPost?.cast || watchlistItem?.cast || "");
-  const [plot, setPlot] = useState(editingPost?.plot || watchlistItem?.plot || "");
-  const [posterUrl, setPosterUrl] = useState(editingPost?.posterUrl || watchlistItem?.posterUrl || "");
-  const [imdbRating, setImdbRating] = useState(editingPost?.imdbRating || watchlistItem?.imdbRating || "");
+  const [genre, setGenre] = useState(
+    editingPost?.genre || watchlistItem?.genre || "",
+  );
+  const [director, setDirector] = useState(
+    editingPost?.director || watchlistItem?.director || "",
+  );
+  const [cast, setCast] = useState(
+    editingPost?.cast || watchlistItem?.cast || "",
+  );
+  const [plot, setPlot] = useState(
+    editingPost?.plot || watchlistItem?.plot || "",
+  );
+  const [posterUrl, setPosterUrl] = useState(
+    editingPost?.posterUrl || watchlistItem?.posterUrl || "",
+  );
+  const [imdbRating, setImdbRating] = useState(
+    editingPost?.imdbRating || watchlistItem?.imdbRating || "",
+  );
   const [userRating, setUserRating] = useState<number>(
     editingPost?.userRating || 5.0,
   );
@@ -324,9 +338,14 @@ export function AdminModal({
               <div className="p-4 rounded-md bg-[#f2ca50]/10 border border-[#f2ca50]/30 flex items-center gap-3">
                 <BookmarkCheck className="w-5 h-5 text-[#f2ca50] shrink-0" />
                 <div className="text-xs">
-                  <p className="font-bold text-[#f2ca50]">Logging Watchlist Item</p>
+                  <p className="font-bold text-[#f2ca50]">
+                    Logging Watchlist Item
+                  </p>
                   <p className="text-[#99907c] text-[11px]">
-                    Publishing this review will automatically mark "{watchlistItem.title}" as <strong className="text-[#e3e2e5]">WATCHED</strong> and link to your new blog post.
+                    Publishing this review will automatically mark "
+                    {watchlistItem.title}" as{" "}
+                    <strong className="text-[#e3e2e5]">WATCHED</strong> and link
+                    to your new blog post.
                   </p>
                 </div>
               </div>
@@ -341,8 +360,8 @@ export function AdminModal({
                     Metadata from OMDb API
                   </h4>
                   <p className="text-[11px] text-[#99907c] mt-0.5 font-label">
-                    Search movies, TV series, documentaries, or anime to instantly
-                    populate title, plot, cast, director, and poster.
+                    Search movies, TV series, documentaries, or anime to
+                    instantly populate title, plot, cast, director, and poster.
                   </p>
                 </div>
                 <button

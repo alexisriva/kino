@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Share2, Copy, Check, ExternalLink, X } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Share2, Copy, Check, ExternalLink, X } from "lucide-react";
 
 interface ShareModalProps {
   title: string;
@@ -16,7 +16,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
   useEffect(() => {
     if (isOpen) {
       const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
       return () => {
         document.body.style.overflow = originalOverflow;
       };
@@ -24,7 +24,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
   }, [isOpen]);
 
   const getShareUrl = () => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       return `${window.location.origin}/post/${slug}`;
     }
     return `/post/${slug}`;
@@ -55,7 +55,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
   };
 
   const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-    `Check out this review of "${title}" on KINO!`
+    `Check out this review of "${title}" on KINO!`,
   )}&url=${encodeURIComponent(getShareUrl())}`;
 
   return (
@@ -83,7 +83,8 @@ export function ShareModal({ title, slug }: ShareModalProps) {
               <Share2 className="w-5 h-5" /> Share Entry
             </h3>
             <p className="text-xs text-[#99907c] mb-5 font-label">
-              Share <strong className="text-[#e3e2e5]">{title}</strong> with fellow film lovers.
+              Share <strong className="text-[#e3e2e5]">{title}</strong> with
+              fellow film lovers.
             </p>
 
             <div className="space-y-3 font-label">
@@ -118,7 +119,10 @@ export function ShareModal({ title, slug }: ShareModalProps) {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-2.5 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] text-[#e3e2e5] border border-[#292a2c] font-semibold text-xs transition-colors cursor-pointer"
               >
-                <svg className="w-4 h-4 fill-current text-[#f2ca50]" viewBox="0 0 24 24">
+                <svg
+                  className="w-4 h-4 fill-current text-[#f2ca50]"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                 </svg>
                 Share on X (Twitter)
