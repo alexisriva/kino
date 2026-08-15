@@ -31,7 +31,8 @@ model Post {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  votes         Vote[]
+  votes          Vote[]
+  watchlistItems WatchlistItem[]
 }
 
 model Vote {
@@ -43,4 +44,22 @@ model Vote {
   createdAt  DateTime @default(now())
 
   @@unique([postId, voterHash])
+}
+
+model WatchlistItem {
+  id          String   @id @default(uuid())
+  title       String
+  mediaType   String   @default("MOVIE") // MOVIE, TV, DOCUMENTARY, ANIME
+  releaseYear Int?
+  genre       String?
+  director    String?
+  cast        String?
+  plot        String?
+  posterUrl   String?
+  imdbRating  String?
+  isWatched   Boolean  @default(false)
+  postId      String?
+  post        Post?    @relation(fields: [postId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

@@ -90,6 +90,7 @@ export async function createPostAction(data: {
   review: string;
   tags?: string;
   isFeatured?: boolean;
+  watchlistItemId?: string;
 }) {
   const isAdmin = await isAdminAuthenticated();
   if (!isAdmin) {
@@ -120,6 +121,57 @@ export async function createPostAction(data: {
         isPublished: true,
       },
     });
+
+    // Handle Watchlist linking or creation
+    let watchlistItemToLink = null;
+    if (data.watchlistItemId) {
+      watchlistItemToLink = await prisma.watchlistItem.findUnique({
+        where: { id: data.watchlistItemId },
+      });
+    }
+
+    // Check if an existing Watchlist item matches by title (case-insensitive)
+    if (!watchlistItemToLink) {
+      watchlistItemToLink = await prisma.watchlistItem.findFirst({
+        where: {
+          title: { equals: data.title },
+        },
+      });
+    }
+
+    if (watchlistItemToLink) {
+      // Mark existing item as watched & link to new post
+      await prisma.watchlistItem.update({
+        where: { id: watchlistItemToLink.id },
+        data: {
+          isWatched: true,
+          postId: post.id,
+          posterUrl: data.posterUrl || watchlistItemToLink.posterUrl,
+          director: data.director || watchlistItemToLink.director,
+          cast: data.cast || watchlistItemToLink.cast,
+          plot: data.plot || watchlistItemToLink.plot,
+          genre: data.genre || watchlistItemToLink.genre,
+          releaseYear: data.releaseYear || watchlistItemToLink.releaseYear,
+        },
+      });
+    } else {
+      // Create new Watchlist item marked as WATCHED
+      await prisma.watchlistItem.create({
+        data: {
+          title: data.title,
+          mediaType: data.mediaType || 'MOVIE',
+          releaseYear: data.releaseYear ? Number(data.releaseYear) : null,
+          genre: data.genre || null,
+          director: data.director || null,
+          cast: data.cast || null,
+          plot: data.plot || null,
+          posterUrl: data.posterUrl || null,
+          imdbRating: data.imdbRating || null,
+          isWatched: true,
+          postId: post.id,
+        },
+      });
+    }
 
     revalidatePath('/');
     revalidatePath(`/post/${post.slug}`);
@@ -161,6 +213,27 @@ export async function updatePostAction(
         userRating: data.userRating ? Number(data.userRating) : undefined,
       },
     });
+
+    // Keep linked Watchlist item synced if title/metadata updated
+    const linkedItem = await prisma.watchlistItem.findFirst({
+      where: { postId: post.id },
+    });
+    if (linkedItem) {
+      await prisma.watchlistItem.update({
+        where: { id: linkedItem.id },
+        data: {
+          title: post.title,
+          mediaType: post.mediaType,
+          releaseYear: post.releaseYear,
+          genre: post.genre,
+          director: post.director,
+          cast: post.cast,
+          plot: post.plot,
+          posterUrl: post.posterUrl,
+          imdbRating: post.imdbRating,
+        },
+      });
+    }
 
     revalidatePath('/');
     revalidatePath(`/post/${post.slug}`);

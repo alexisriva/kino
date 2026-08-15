@@ -1,16 +1,40 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import { HeroBanner } from "@/components/HeroBanner";
 import { MediaGrid } from "@/components/MediaGrid";
+import { WatchlistGrid } from "@/components/WatchlistGrid";
 import { AdminModal } from "@/components/AdminModal";
 import { getPostsAction, deletePostAction } from "@/actions/postActions";
 import { Plus, Sparkles, RefreshCw } from "lucide-react";
 
-export default function HomePage() {
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Derive currentView from URL search parameter (single source of truth)
+  const viewParam = searchParams.get("view");
+  const currentView: "journal" | "watchlist" = viewParam === "watchlist" ? "watchlist" : "journal";
+
+  const handleViewChange = (newView: "journal" | "watchlist") => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (newView === "journal") {
+      params.delete("view");
+      params.delete("tab");
+      router.replace("/");
+    } else {
+      params.set("view", "watchlist");
+      if (!params.get("tab")) {
+        params.set("tab", "queued");
+      }
+      router.replace(`/?${params.toString()}`);
+    }
+  };
 
   // Filters
   const [activeCategory, setActiveCategory] = useState("ALL");
@@ -22,6 +46,7 @@ export default function HomePage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [editingPost, setEditingPost] = useState<any>(null);
+  const [loggingWatchlistItem, setLoggingWatchlistItem] = useState<any>(null);
 
   // Fetch posts from database Server Action
   const loadPosts = async () => {
@@ -58,6 +83,13 @@ export default function HomePage() {
 
   const handleEditPost = (post: any) => {
     setEditingPost(post);
+    setLoggingWatchlistItem(null);
+    setShowAdminModal(true);
+  };
+
+  const handleLogWatchlistItem = (item: any) => {
+    setLoggingWatchlistItem(item);
+    setEditingPost(null);
     setShowAdminModal(true);
   };
 
@@ -84,24 +116,27 @@ export default function HomePage() {
         isAdmin={isAdmin}
         onOpenAdminModal={() => {
           setEditingPost(null);
+          setLoggingWatchlistItem(null);
           setShowAdminModal(true);
         }}
+        currentView={currentView}
+        onViewChange={handleViewChange}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-16">
-        {/* Admin Quick Action Floating Bar when logged in */}
-        {isAdmin && (
+        {/* Admin Quick Action Floating Bar (only shown on Journal Feed view) */}
+        {isAdmin && currentView === "journal" && (
           <div className="mt-6 p-4 rounded-md bg-[#1b1c1e] border border-[#292a2c] flex items-center justify-between shadow-lg">
             <div className="flex items-center gap-2 text-xs font-bold text-[#f2ca50] font-label">
               <Sparkles className="w-4 h-4 text-[#f2ca50]" />
               <span>
-                Admin Mode Active — You can now add, edit (✏️), and delete (🗑️)
-                entries directly on each card
+                Admin Mode Active — You can now add, edit (✏️), and delete (🗑️) entries directly on each card
               </span>
             </div>
             <button
               onClick={() => {
                 setEditingPost(null);
+                setLoggingWatchlistItem(null);
                 setShowAdminModal(true);
               }}
               className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shadow-sm transition-all cursor-pointer"
@@ -111,46 +146,58 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Hero Spotlight (Featured Entry) */}
-        {!loading &&
-          featuredPost &&
-          !searchQuery &&
-          !selectedTag &&
-          activeCategory === "ALL" && <HeroBanner post={featuredPost} />}
-
-        {/* Loading Indicator */}
-        {loading ? (
-          <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-[#99907c]">
-            <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
-            <p className="text-xs font-semibold font-label">
-              Loading KINO Journal Entries...
-            </p>
-          </div>
-        ) : (
-          /* Media Grid List */
-          <MediaGrid
-            posts={posts}
+        {/* View Switch: Watchlist Grid vs Journal Feed */}
+        {currentView === "watchlist" ? (
+          <WatchlistGrid
             isAdmin={isAdmin}
-            activeCategory={activeCategory}
-            onCategoryChange={(cat) => setActiveCategory(cat)}
-            activeSort={activeSort}
-            onSortChange={(sort) => setActiveSort(sort)}
-            selectedTag={selectedTag}
-            onTagChange={(tag) => setSelectedTag(tag)}
-            onEditPost={handleEditPost}
-            onDeletePost={handleDeletePost}
+            onLogReviewFromWatchlist={handleLogWatchlistItem}
           />
+        ) : (
+          <>
+            {/* Hero Spotlight (Featured Entry) */}
+            {!loading &&
+              featuredPost &&
+              !searchQuery &&
+              !selectedTag &&
+              activeCategory === "ALL" && <HeroBanner post={featuredPost} />}
+
+            {/* Loading Indicator */}
+            {loading ? (
+              <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-[#99907c]">
+                <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
+                <p className="text-xs font-semibold font-label">
+                  Loading KINO Journal Entries...
+                </p>
+              </div>
+            ) : (
+              /* Media Grid List */
+              <MediaGrid
+                posts={posts}
+                isAdmin={isAdmin}
+                activeCategory={activeCategory}
+                onCategoryChange={(cat) => setActiveCategory(cat)}
+                activeSort={activeSort}
+                onSortChange={(sort) => setActiveSort(sort)}
+                selectedTag={selectedTag}
+                onTagChange={(tag) => setSelectedTag(tag)}
+                onEditPost={handleEditPost}
+                onDeletePost={handleDeletePost}
+              />
+            )}
+          </>
         )}
       </main>
 
-      {/* Admin Creator / Login Modal */}
+      {/* Admin Creator / Login / Watchlist Review Modal */}
       {showAdminModal && (
         <AdminModal
           isAdmin={isAdmin}
           editingPost={editingPost}
+          watchlistItem={loggingWatchlistItem}
           onClose={() => {
             setShowAdminModal(false);
             setEditingPost(null);
+            setLoggingWatchlistItem(null);
           }}
           onAdminStatusChange={(status) => setIsAdmin(status)}
         />
@@ -177,5 +224,17 @@ export default function HomePage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#121315] flex items-center justify-center text-[#99907c]">
+        <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }

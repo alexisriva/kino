@@ -11,6 +11,7 @@ import type { Metadata } from 'next';
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ from?: string; tab?: string }>;
 }
 
 export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
@@ -35,8 +36,9 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   };
 }
 
-export default async function PostDetailPage({ params }: PostPageProps) {
+export default async function PostDetailPage({ params, searchParams }: PostPageProps) {
   const { slug } = await params;
+  const { from, tab } = await searchParams;
   const res = await getPostBySlugAction(slug);
 
   if (!res.success || !res.post) {
@@ -45,20 +47,27 @@ export default async function PostDetailPage({ params }: PostPageProps) {
 
   const post = res.post;
   const tagsList = post.tags ? post.tags.split(',').filter(Boolean) : [];
+  const isFromWatchlist = from === 'watchlist';
+  const backTargetUrl = isFromWatchlist
+    ? tab
+      ? `/?view=watchlist&tab=${tab}`
+      : '/?view=watchlist&tab=watched'
+    : '/';
 
   return (
     <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Header */}
-      <Header />
+      <Header currentView={isFromWatchlist ? 'watchlist' : 'journal'} />
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full py-8">
         {/* Back Link */}
         <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#99907c] hover:text-[#f2ca50] mb-6 transition-colors font-label"
+          href={backTargetUrl}
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#99907c] hover:text-[#f2ca50] mb-6 transition-colors font-label cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Journal Grid
+          <ArrowLeft className="w-4 h-4" />{' '}
+          {isFromWatchlist ? 'Back to Watchlist' : 'Back to Journal Grid'}
         </Link>
 
         {/* Post Hero Section */}

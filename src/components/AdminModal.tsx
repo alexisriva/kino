@@ -13,11 +13,13 @@ import {
   LogOut,
   CheckCircle2,
   Film,
+  BookmarkCheck,
 } from "lucide-react";
 
 interface AdminModalProps {
   isAdmin: boolean;
   editingPost?: any;
+  watchlistItem?: any;
   onClose: () => void;
   onAdminStatusChange: (status: boolean) => void;
 }
@@ -25,6 +27,7 @@ interface AdminModalProps {
 export function AdminModal({
   isAdmin,
   editingPost,
+  watchlistItem,
   onClose,
   onAdminStatusChange,
 }: AdminModalProps) {
@@ -50,18 +53,18 @@ export function AdminModal({
   const [omdbError, setOmdbError] = useState("");
   const [showOmdbSearch, setShowOmdbSearch] = useState(false);
 
-  // Post form state
-  const [title, setTitle] = useState(editingPost?.title || "");
-  const [mediaType, setMediaType] = useState(editingPost?.mediaType || "MOVIE");
+  // Post form state initialized from editingPost OR watchlistItem
+  const [title, setTitle] = useState(editingPost?.title || watchlistItem?.title || "");
+  const [mediaType, setMediaType] = useState(editingPost?.mediaType || watchlistItem?.mediaType || "MOVIE");
   const [releaseYear, setReleaseYear] = useState<number | string>(
-    editingPost?.releaseYear || "",
+    editingPost?.releaseYear || watchlistItem?.releaseYear || "",
   );
-  const [genre, setGenre] = useState(editingPost?.genre || "");
-  const [director, setDirector] = useState(editingPost?.director || "");
-  const [cast, setCast] = useState(editingPost?.cast || "");
-  const [plot, setPlot] = useState(editingPost?.plot || "");
-  const [posterUrl, setPosterUrl] = useState(editingPost?.posterUrl || "");
-  const [imdbRating, setImdbRating] = useState(editingPost?.imdbRating || "");
+  const [genre, setGenre] = useState(editingPost?.genre || watchlistItem?.genre || "");
+  const [director, setDirector] = useState(editingPost?.director || watchlistItem?.director || "");
+  const [cast, setCast] = useState(editingPost?.cast || watchlistItem?.cast || "");
+  const [plot, setPlot] = useState(editingPost?.plot || watchlistItem?.plot || "");
+  const [posterUrl, setPosterUrl] = useState(editingPost?.posterUrl || watchlistItem?.posterUrl || "");
+  const [imdbRating, setImdbRating] = useState(editingPost?.imdbRating || watchlistItem?.imdbRating || "");
   const [userRating, setUserRating] = useState<number>(
     editingPost?.userRating || 5.0,
   );
@@ -195,6 +198,7 @@ export function AdminModal({
       review,
       tags,
       isFeatured,
+      watchlistItemId: watchlistItem?.id,
     };
 
     let res;
@@ -208,7 +212,9 @@ export function AdminModal({
       setFormSuccess(
         editingPost
           ? "Post updated successfully!"
-          : "Post published successfully!",
+          : watchlistItem
+            ? "Review published & Watchlist item marked as Watched!"
+            : "Post published successfully!",
       );
       setTimeout(() => {
         onClose();
@@ -287,7 +293,9 @@ export function AdminModal({
                 <h2 className="font-headline text-xl font-bold text-[#e3e2e5]">
                   {editingPost
                     ? "Edit Journal Entry"
-                    : "Publish New Journal Entry"}
+                    : watchlistItem
+                      ? `Log Review for "${watchlistItem.title}"`
+                      : "Publish New Journal Entry"}
                 </h2>
               </div>
 
@@ -311,29 +319,44 @@ export function AdminModal({
               </div>
             </div>
 
-            {/* OMDb API Auto-Fill Banner */}
-            <div className="p-4 rounded-md bg-[#121315] border border-[#4d4635] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div>
-                <h4 className="text-xs font-bold text-[#f2ca50] flex items-center gap-1.5 font-headline">
-                  <Sparkles className="w-4 h-4 text-[#f2ca50]" /> Auto-fill
-                  Metadata from OMDb API
-                </h4>
-                <p className="text-[11px] text-[#99907c] mt-0.5 font-label">
-                  Search movies, TV series, documentaries, or anime to instantly
-                  populate title, plot, cast, director, and poster.
-                </p>
+            {/* Watchlist Item Info Banner when logging review */}
+            {watchlistItem && (
+              <div className="p-4 rounded-md bg-[#f2ca50]/10 border border-[#f2ca50]/30 flex items-center gap-3">
+                <BookmarkCheck className="w-5 h-5 text-[#f2ca50] shrink-0" />
+                <div className="text-xs">
+                  <p className="font-bold text-[#f2ca50]">Logging Watchlist Item</p>
+                  <p className="text-[#99907c] text-[11px]">
+                    Publishing this review will automatically mark "{watchlistItem.title}" as <strong className="text-[#e3e2e5]">WATCHED</strong> and link to your new blog post.
+                  </p>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={() => setShowOmdbSearch(!showOmdbSearch)}
-                className="px-3.5 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shadow-sm shrink-0 hover:bg-[#e9c349] transition-all cursor-pointer"
-              >
-                {showOmdbSearch ? "Close Search" : "Search OMDb API"}
-              </button>
-            </div>
+            )}
+
+            {/* OMDb API Auto-Fill Banner */}
+            {!watchlistItem && (
+              <div className="p-4 rounded-md bg-[#121315] border border-[#4d4635] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-xs font-bold text-[#f2ca50] flex items-center gap-1.5 font-headline">
+                    <Sparkles className="w-4 h-4 text-[#f2ca50]" /> Auto-fill
+                    Metadata from OMDb API
+                  </h4>
+                  <p className="text-[11px] text-[#99907c] mt-0.5 font-label">
+                    Search movies, TV series, documentaries, or anime to instantly
+                    populate title, plot, cast, director, and poster.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowOmdbSearch(!showOmdbSearch)}
+                  className="px-3.5 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shadow-sm shrink-0 hover:bg-[#e9c349] transition-all cursor-pointer"
+                >
+                  {showOmdbSearch ? "Close Search" : "Search OMDb API"}
+                </button>
+              </div>
+            )}
 
             {/* OMDb Search Accordion */}
-            {showOmdbSearch && (
+            {showOmdbSearch && !watchlistItem && (
               <div className="p-4 rounded-md bg-[#121315] border border-[#292a2c] space-y-3 font-label">
                 <div className="flex gap-2">
                   <input
