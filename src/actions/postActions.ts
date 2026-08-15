@@ -6,6 +6,29 @@ import { headers } from 'next/headers';
 import crypto from 'crypto';
 import { revalidatePath } from 'next/cache';
 
+export async function getFeaturedPostAction() {
+  try {
+    // 1. Try to find an explicitly featured post
+    let post = await prisma.post.findFirst({
+      where: { isPublished: true, isFeatured: true },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    // 2. If no post is marked as featured, fallback to the latest post
+    if (!post) {
+      post = await prisma.post.findFirst({
+        where: { isPublished: true },
+        orderBy: { createdAt: 'desc' },
+      });
+    }
+
+    return { success: true, post };
+  } catch (error: any) {
+    console.error('getFeaturedPostAction error:', error);
+    return { success: false, error: error.message || 'Failed to fetch featured post', post: null };
+  }
+}
+
 export async function getPostsAction(params?: {
   category?: string;
   search?: string;

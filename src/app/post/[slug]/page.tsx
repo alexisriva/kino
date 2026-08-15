@@ -1,32 +1,34 @@
-import React from 'react';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getPostBySlugAction } from '@/actions/postActions';
-import { StarRating } from '@/components/StarRating';
-import { LikeDislikeButtons } from '@/components/LikeDislikeButtons';
-import { ShareModal } from '@/components/ShareModal';
-import { Header } from '@/components/Header';
-import { ArrowLeft, Film, Tag, Star } from 'lucide-react';
-import type { Metadata } from 'next';
+import React from "react";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { getPostBySlugAction } from "@/actions/postActions";
+import { StarRating } from "@/components/StarRating";
+import { LikeDislikeButtons } from "@/components/LikeDislikeButtons";
+import { ShareModal } from "@/components/ShareModal";
+import { Header } from "@/components/Header";
+import { ArrowLeft, Film, Tag, Star } from "lucide-react";
+import type { Metadata } from "next";
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
   searchParams: Promise<{ from?: string; tab?: string }>;
 }
 
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PostPageProps): Promise<Metadata> {
   const { slug } = await params;
   const res = await getPostBySlugAction(slug);
 
   if (!res.success || !res.post) {
     return {
-      title: 'Post Not Found — KINO',
+      title: "Post Not Found — KINO",
     };
   }
 
   const post = res.post;
   return {
-    title: `${post.title} (${post.releaseYear || ''}) Review — KINO Journal`,
+    title: `${post.title} (${post.releaseYear || ""}) Review — KINO Journal`,
     description: post.plot || post.review.slice(0, 160),
     openGraph: {
       title: `${post.title} — KINO Review`,
@@ -36,7 +38,10 @@ export async function generateMetadata({ params }: PostPageProps): Promise<Metad
   };
 }
 
-export default async function PostDetailPage({ params, searchParams }: PostPageProps) {
+export default async function PostDetailPage({
+  params,
+  searchParams,
+}: PostPageProps) {
   const { slug } = await params;
   const { from, tab } = await searchParams;
   const res = await getPostBySlugAction(slug);
@@ -46,18 +51,18 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
   }
 
   const post = res.post;
-  const tagsList = post.tags ? post.tags.split(',').filter(Boolean) : [];
-  const isFromWatchlist = from === 'watchlist';
+  const tagsList = post.tags ? post.tags.split(",").filter(Boolean) : [];
+  const isFromWatchlist = from === "watchlist";
   const backTargetUrl = isFromWatchlist
     ? tab
       ? `/watchlist?tab=${tab}`
-      : '/watchlist?tab=watched'
-    : '/';
+      : "/watchlist?tab=watched"
+    : "/";
 
   return (
     <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Header */}
-      <Header currentView={isFromWatchlist ? 'watchlist' : 'journal'} />
+      <Header currentView={isFromWatchlist ? "watchlist" : "journal"} />
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full py-8">
@@ -66,8 +71,8 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
           href={backTargetUrl}
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#99907c] hover:text-[#f2ca50] mb-6 transition-colors font-label cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4" />{' '}
-          {isFromWatchlist ? 'Back to Watchlist' : 'Back to Journal Grid'}
+          <ArrowLeft className="w-4 h-4" />{" "}
+          {isFromWatchlist ? "Back to Watchlist" : "Back to Journal Grid"}
         </Link>
 
         {/* Post Hero Section */}
@@ -75,7 +80,7 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
           <div className="relative z-10 flex flex-col md:flex-row gap-8 items-start">
             {/* Poster Card */}
             {post.posterUrl ? (
-              <div className="relative shrink-0 mx-auto md:mx-0 w-52 sm:w-64 aspect-[2/3] overflow-hidden rounded-md bg-[#0d0e10] border border-[#292a2c]">
+              <div className="relative shrink-0 mx-auto md:mx-0 w-52 sm:w-64 aspect-2/3 overflow-hidden rounded-md bg-[#0d0e10] border border-[#292a2c]">
                 <img
                   src={post.posterUrl}
                   alt={post.title}
@@ -86,7 +91,9 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
             ) : (
               <div className="w-52 h-76 rounded-md bg-[#0d0e10] flex flex-col items-center justify-center p-4 text-[#99907c] border border-[#292a2c]">
                 <Film className="w-16 h-16 mb-2" />
-                <span className="text-xs font-bold text-center">{post.title}</span>
+                <span className="text-xs font-bold text-center">
+                  {post.title}
+                </span>
               </div>
             )}
 
@@ -114,7 +121,9 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
 
               {/* Star Rating */}
               <div className="flex items-center gap-3 py-1">
-                <span className="text-xs font-bold text-[#99907c]">Your Rating:</span>
+                <span className="text-xs font-bold text-[#99907c]">
+                  Your Rating:
+                </span>
                 <StarRating rating={post.userRating || 5.0} size="lg" />
               </div>
 
@@ -152,7 +161,9 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
                   <span className="text-[10px] font-bold text-[#99907c] uppercase tracking-wider block">
                     Synopsis / Plot
                   </span>
-                  <p className="font-journal text-sm leading-relaxed italic text-[#d0c5af]">{post.plot}</p>
+                  <p className="font-journal text-sm leading-relaxed italic text-[#d0c5af]">
+                    {post.plot}
+                  </p>
                 </div>
               )}
 
@@ -174,7 +185,8 @@ export default async function PostDetailPage({ params, searchParams }: PostPageP
         {/* Detailed Journal Review Content */}
         <article className="w-full p-6 sm:p-10 rounded-lg bg-[#1b1c1e] border border-[#292a2c] space-y-6">
           <h2 className="font-headline text-2xl font-bold text-[#e3e2e5] flex items-center gap-2 border-b border-[#292a2c] pb-4">
-            <Star className="w-5 h-5 text-[#f2ca50] fill-[#f2ca50]" /> Journal Entry & Critical Review
+            <Star className="w-5 h-5 text-[#f2ca50] fill-[#f2ca50]" /> Journal
+            Entry & Critical Review
           </h2>
 
           <div className="font-journal text-[#d0c5af] text-lg leading-relaxed space-y-4 whitespace-pre-line">

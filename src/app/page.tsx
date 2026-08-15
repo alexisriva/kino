@@ -5,11 +5,14 @@ import { Header } from "@/components/Header";
 import { HeroBanner } from "@/components/HeroBanner";
 import { MediaGrid } from "@/components/MediaGrid";
 import { AdminModal } from "@/components/AdminModal";
-import { getPostsAction, deletePostAction } from "@/actions/postActions";
+import { getPostsAction, getFeaturedPostAction, deletePostAction } from "@/actions/postActions";
 import { Plus, Sparkles, RefreshCw } from "lucide-react";
+
+const SORT_STORAGE_KEY = "kino_active_sort";
 
 export default function HomePage() {
   const [posts, setPosts] = useState<any[]>([]);
+  const [featuredPost, setFeaturedPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   // Filters
@@ -22,6 +25,35 @@ export default function HomePage() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [editingPost, setEditingPost] = useState<any>(null);
+
+  // Restore saved sort preference from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedSort = localStorage.getItem(SORT_STORAGE_KEY);
+      if (savedSort && ["latest", "rating", "likes", "oldest"].includes(savedSort)) {
+        setActiveSort(savedSort);
+      }
+    } catch {
+      // Ignore localStorage errors (e.g. private browsing)
+    }
+  }, []);
+
+  const handleSortChange = (newSort: string) => {
+    setActiveSort(newSort);
+    try {
+      localStorage.setItem(SORT_STORAGE_KEY, newSort);
+    } catch {
+      // Ignore localStorage errors
+    }
+  };
+
+  // Fetch featured post once / whenever posts change
+  const loadFeaturedPost = async () => {
+    const res = await getFeaturedPostAction();
+    if (res.success && res.post) {
+      setFeaturedPost(res.post);
+    }
+  };
 
   // Fetch posts from database Server Action
   const loadPosts = async () => {
@@ -37,6 +69,10 @@ export default function HomePage() {
     }
     setLoading(false);
   };
+
+  useEffect(() => {
+    loadFeaturedPost();
+  }, []);
 
   useEffect(() => {
     loadPosts();
@@ -66,12 +102,11 @@ export default function HomePage() {
     const res = await deletePostAction(id);
     if (res.success) {
       loadPosts();
+      loadFeaturedPost();
     } else {
       alert(res.error || "Failed to delete post");
     }
   };
-
-  const featuredPost = posts.find((p) => p.isFeatured) || posts[0];
 
   return (
     <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
@@ -109,9 +144,8 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Hero Spotlight (Featured Entry) */}
-        {!loading &&
-          featuredPost &&
+        {/* Hero Spotlight (Featured Entry) — remains pinned and unaffected by grid sorting */}
+        {featuredPost &&
           !searchQuery &&
           !selectedTag &&
           activeCategory === "ALL" && <HeroBanner post={featuredPost} />}
@@ -132,7 +166,7 @@ export default function HomePage() {
             activeCategory={activeCategory}
             onCategoryChange={(cat) => setActiveCategory(cat)}
             activeSort={activeSort}
-            onSortChange={(sort) => setActiveSort(sort)}
+            onSortChange={handleSortChange}
             selectedTag={selectedTag}
             onTagChange={(tag) => setSelectedTag(tag)}
             onEditPost={handleEditPost}
