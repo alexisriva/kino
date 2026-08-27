@@ -7,10 +7,7 @@ import {
   X,
   Lock,
   ShieldCheck,
-  Sparkles,
-  LogOut,
   CheckCircle2,
-  Film,
   BookmarkCheck,
 } from "lucide-react";
 
@@ -42,14 +39,6 @@ export function AdminModal({
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loginLoading, setLoginLoading] = useState(false);
-
-  // OMDb Search state
-  const [omdbQuery, setOmdbQuery] = useState("");
-  const [omdbSearchType, setOmdbSearchType] = useState(""); // '' (all), 'movie', 'series'
-  const [omdbResults, setOmdbResults] = useState<any[]>([]);
-  const [omdbLoading, setOmdbLoading] = useState(false);
-  const [omdbError, setOmdbError] = useState("");
-  const [showOmdbSearch, setShowOmdbSearch] = useState(false);
 
   // Post form state initialized from editingPost OR watchlistItem
   const [title, setTitle] = useState(
@@ -92,6 +81,11 @@ export function AdminModal({
   const [formSuccess, setFormSuccess] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
+  // If user is admin but neither editing a post nor logging a watchlist item, this modal should not render
+  if (isAdmin && !editingPost && !watchlistItem) {
+    return null;
+  }
+
   // Handle Admin Login
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,73 +110,6 @@ export function AdminModal({
       setLoginError("Authentication server error");
     } finally {
       setLoginLoading(false);
-    }
-  };
-
-  // Handle Admin Logout
-  const handleLogout = async () => {
-    await fetch("/api/admin/logout", { method: "POST" });
-    onAdminStatusChange(false);
-    onClose();
-  };
-
-  // Query OMDb API
-  const handleOmdbSearch = async () => {
-    if (!omdbQuery.trim()) return;
-    setOmdbLoading(true);
-    setOmdbError("");
-    setOmdbResults([]);
-
-    try {
-      const typeParam = omdbSearchType ? `&type=${omdbSearchType}` : "";
-      const res = await fetch(
-        `/api/omdb/search?title=${encodeURIComponent(omdbQuery)}${typeParam}`,
-      );
-      const data = await res.json();
-
-      if (data.Search) {
-        setOmdbResults(data.Search);
-      } else if (data.Title) {
-        setOmdbResults([data]);
-      } else if (data.error) {
-        setOmdbError(data.error);
-      }
-    } catch (err) {
-      setOmdbError("Error connecting to OMDb metadata service");
-    } finally {
-      setOmdbLoading(false);
-    }
-  };
-
-  // Select item from OMDb search results to autofill form
-  const handleSelectOmdbItem = async (imdbID: string) => {
-    setOmdbLoading(true);
-    try {
-      const res = await fetch(`/api/omdb/search?i=${imdbID}`);
-      const item = await res.json();
-
-      if (item && item.Title) {
-        setTitle(item.Title);
-        setReleaseYear(item.Year ? parseInt(item.Year) : "");
-        setGenre(item.Genre !== "N/A" ? item.Genre : "");
-        setDirector(item.Director !== "N/A" ? item.Director : "");
-        setCast(item.Actors !== "N/A" ? item.Actors : "");
-        setPlot(item.Plot !== "N/A" ? item.Plot : "");
-        setPosterUrl(item.Poster !== "N/A" ? item.Poster : "");
-        setImdbRating(item.imdbRating !== "N/A" ? `${item.imdbRating}/10` : "");
-        setMediaType(
-          item.Type === "series"
-            ? "TV"
-            : item.Genre?.toLowerCase().includes("documentary")
-              ? "DOCUMENTARY"
-              : "MOVIE",
-        );
-        setShowOmdbSearch(false);
-      }
-    } catch (err) {
-      setOmdbError("Failed to fetch item details");
-    } finally {
-      setOmdbLoading(false);
     }
   };
 
@@ -226,9 +153,7 @@ export function AdminModal({
       setFormSuccess(
         editingPost
           ? "Post updated successfully!"
-          : watchlistItem
-            ? "Review published & Watchlist item marked as Watched!"
-            : "Post published successfully!",
+          : "Review published & Watchlist item marked as Watched!",
       );
       setTimeout(() => {
         onClose();
@@ -299,7 +224,7 @@ export function AdminModal({
             </form>
           </div>
         ) : (
-          /* POST EDITOR FORM */
+          /* POST EDITOR FORM (ONLY FOR WATCHLIST LOGGING OR EDITING EXISTING POST) */
           <div className="space-y-6">
             <div className="flex items-center justify-between border-b border-[#292a2c] pb-4">
               <div className="flex items-center gap-2">
@@ -307,32 +232,19 @@ export function AdminModal({
                 <h2 className="font-headline text-xl font-bold text-[#e3e2e5]">
                   {editingPost
                     ? "Edit Journal Entry"
-                    : watchlistItem
-                      ? `Log Review for "${watchlistItem.title}"`
-                      : "Publish New Journal Entry"}
+                    : `Log Review for "${watchlistItem?.title}"`}
                 </h2>
               </div>
 
-              {/* Header Right Actions: Logout (if not logging watchlist) & Close */}
-              <div className="flex items-center gap-3">
-                {!watchlistItem && (
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xs font-medium border border-rose-500/30 transition-colors cursor-pointer"
-                  >
-                    <LogOut className="w-3.5 h-3.5" /> Logout
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer"
-                  title="Close modal"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={onClose}
+                className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer"
+                title="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
 
             {/* Watchlist Item Info Banner when logging review */}
@@ -353,111 +265,10 @@ export function AdminModal({
               </div>
             )}
 
-            {/* OMDb API Auto-Fill Banner */}
-            {!watchlistItem && (
-              <div className="p-4 rounded-md bg-[#121315] border border-[#4d4635] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div>
-                  <h4 className="text-xs font-bold text-[#f2ca50] flex items-center gap-1.5 font-headline">
-                    <Sparkles className="w-4 h-4 text-[#f2ca50]" /> Auto-fill
-                    Metadata from OMDb API
-                  </h4>
-                  <p className="text-[11px] text-[#99907c] mt-0.5 font-label">
-                    Search movies, TV series, documentaries, or anime to
-                    instantly populate title, plot, cast, director, and poster.
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowOmdbSearch(!showOmdbSearch)}
-                  className="px-3.5 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shadow-sm shrink-0 hover:bg-[#e9c349] transition-all cursor-pointer"
-                >
-                  {showOmdbSearch ? "Close Search" : "Search OMDb API"}
-                </button>
-              </div>
-            )}
-
-            {/* OMDb Search Accordion */}
-            {showOmdbSearch && !watchlistItem && (
-              <div className="p-4 rounded-md bg-[#121315] border border-[#292a2c] space-y-3 font-label">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Type movie, TV series, or doc title (e.g. Severance, Succession)..."
-                    value={omdbQuery}
-                    onChange={(e) => setOmdbQuery(e.target.value)}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" &&
-                      (e.preventDefault(), handleOmdbSearch())
-                    }
-                    className="w-full px-3.5 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                  <select
-                    value={omdbSearchType}
-                    onChange={(e) => setOmdbSearchType(e.target.value)}
-                    className="px-3 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] shrink-0 cursor-pointer"
-                  >
-                    <option value="">All Types</option>
-                    <option value="movie">Movies</option>
-                    <option value="series">TV Series</option>
-                  </select>
-                  <button
-                    type="button"
-                    onClick={handleOmdbSearch}
-                    disabled={omdbLoading}
-                    className="px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shrink-0 transition-colors cursor-pointer"
-                  >
-                    {omdbLoading ? "Searching..." : "Search"}
-                  </button>
-                </div>
-
-                {omdbError && (
-                  <p className="text-xs text-rose-400 font-medium">
-                    {omdbError}
-                  </p>
-                )}
-
-                {omdbResults.length > 0 && (
-                  <div className="max-h-60 overflow-y-auto space-y-2 pt-2 border-t border-[#292a2c]">
-                    {omdbResults.map((item, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => handleSelectOmdbItem(item.imdbID)}
-                        className="flex items-center gap-3 p-2 rounded-md bg-[#1b1c1e] hover:bg-[#292a2c] border border-[#292a2c] cursor-pointer transition-colors"
-                      >
-                        {item.Poster && item.Poster !== "N/A" ? (
-                          <img
-                            src={item.Poster}
-                            alt={item.Title}
-                            referrerPolicy="no-referrer"
-                            className="w-10 h-14 object-cover rounded-sm"
-                          />
-                        ) : (
-                          <div className="w-10 h-14 rounded-sm bg-[#0d0e10] flex items-center justify-center text-[#99907c]">
-                            <Film className="w-5 h-5" />
-                          </div>
-                        )}
-                        <div className="flex-1">
-                          <h5 className="text-xs font-bold text-[#e3e2e5] font-headline">
-                            {item.Title}
-                          </h5>
-                          <p className="text-[10px] text-[#99907c]">
-                            {item.Year} • {item.Type?.toUpperCase()}
-                          </p>
-                        </div>
-                        <span className="text-[10px] font-bold text-[#f2ca50] px-2 py-1 bg-[#f2ca50]/10 border border-[#f2ca50]/30 rounded-sm cursor-pointer">
-                          Import ↓
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Entry Form */}
             <form onSubmit={handleSubmitPost} className="space-y-4 font-label">
-              {/* Metadata Fields (only when creating/editing standalone post, hidden for watchlist review logging) */}
-              {!watchlistItem && (
+              {/* Metadata Fields (only when editing existing post) */}
+              {editingPost && (
                 <>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="sm:col-span-2">

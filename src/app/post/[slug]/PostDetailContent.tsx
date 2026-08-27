@@ -46,7 +46,12 @@ export function PostDetailContent({
       <Header
         currentView={isFromWatchlist ? "watchlist" : "journal"}
         isAdmin={isAdmin}
-        onOpenAdminModal={() => setShowAdminModal(true)}
+        onAdminStatusChange={(status) => setIsAdmin(status)}
+        onOpenAdminModal={() => {
+          if (!isAdmin) {
+            setShowAdminModal(true);
+          }
+        }}
       />
 
       {/* Main Content */}

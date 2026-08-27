@@ -39,9 +39,12 @@ function WatchlistContent() {
         searchQuery={searchQuery}
         onSearchChange={(q) => setSearchQuery(q)}
         isAdmin={isAdmin}
+        onAdminStatusChange={(status) => setIsAdmin(status)}
         onOpenAdminModal={() => {
-          setLoggingWatchlistItem(null);
-          setShowAdminModal(true);
+          if (!isAdmin) {
+            setLoggingWatchlistItem(null);
+            setShowAdminModal(true);
+          }
         }}
         currentView="watchlist"
       />

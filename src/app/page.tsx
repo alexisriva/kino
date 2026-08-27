@@ -115,9 +115,12 @@ export default function HomePage() {
         searchQuery={searchQuery}
         onSearchChange={(q) => setSearchQuery(q)}
         isAdmin={isAdmin}
+        onAdminStatusChange={(status) => setIsAdmin(status)}
         onOpenAdminModal={() => {
-          setEditingPost(null);
-          setShowAdminModal(true);
+          if (!isAdmin) {
+            setEditingPost(null);
+            setShowAdminModal(true);
+          }
         }}
         currentView="journal"
       />

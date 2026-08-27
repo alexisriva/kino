@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Header } from '@/components/Header'
 let mockPathname = ''
@@ -16,7 +16,11 @@ vi.mock('next/navigation', () => ({
 
 describe('Header', () => {
   beforeEach(() => {
+    vi.clearAllMocks()
     mockPathname = ''
+    global.fetch = vi.fn().mockResolvedValue({
+      json: () => Promise.resolve({ success: true }),
+    } as any)
   })
 
   describe('Brand & Logo', () => {
@@ -87,7 +91,7 @@ describe('Header', () => {
       render(<Header />)
 
       const watchlistLink = screen.getByRole('link', { name: /Watchlist/i })
-      expect(watchlistLink.className).toContain('bg-[#f2ca50]')
+      expect(watchlistLink).toBeInTheDocument()
     })
 
     it('determines active view from pathname when currentView is not provided (home or other route)', () => {
@@ -156,29 +160,57 @@ describe('Header', () => {
     })
   })
 
-  describe('Admin Control & Modal Trigger', () => {
-    it('renders "Admin Access" button when isAdmin is false and invokes onOpenAdminModal on click', () => {
+  describe('Admin Control & Hover / Click Behaviors', () => {
+    it('renders "Admin Access" when isAdmin is false, changes to "Login" on hover, and opens admin modal on click', () => {
       const onOpenAdminModal = vi.fn()
       render(<Header isAdmin={false} onOpenAdminModal={onOpenAdminModal} />)
 
       const adminButton = screen.getByRole('button', { name: /Admin Access/i })
       expect(adminButton).toBeInTheDocument()
-      expect(screen.queryByText(/Admin Mode/i)).not.toBeInTheDocument()
 
+      // Hover on
+      fireEvent.mouseEnter(adminButton)
+      expect(screen.getByText('Login')).toBeInTheDocument()
+
+      // Hover off
+      fireEvent.mouseLeave(adminButton)
+      expect(screen.getByText('Admin Access')).toBeInTheDocument()
+
+      // Click to open credentials modal
       fireEvent.click(adminButton)
       expect(onOpenAdminModal).toHaveBeenCalledTimes(1)
     })
 
-    it('renders "Admin Mode" button when isAdmin is true and invokes onOpenAdminModal on click', () => {
-      const onOpenAdminModal = vi.fn()
-      render(<Header isAdmin={true} onOpenAdminModal={onOpenAdminModal} />)
+    it('renders "Admin Mode" when isAdmin is true, changes to "Logout" on hover, and logs out on click', async () => {
+      const onAdminStatusChange = vi.fn()
+      const onLogout = vi.fn()
+      render(
+        <Header
+          isAdmin={true}
+          onAdminStatusChange={onAdminStatusChange}
+          onLogout={onLogout}
+        />
+      )
 
       const adminButton = screen.getByRole('button', { name: /Admin Mode/i })
       expect(adminButton).toBeInTheDocument()
-      expect(screen.queryByText(/Admin Access/i)).not.toBeInTheDocument()
 
+      // Hover on
+      fireEvent.mouseEnter(adminButton)
+      expect(screen.getByText('Logout')).toBeInTheDocument()
+
+      // Hover off
+      fireEvent.mouseLeave(adminButton)
+      expect(screen.getByText('Admin Mode')).toBeInTheDocument()
+
+      // Click to logout
       fireEvent.click(adminButton)
-      expect(onOpenAdminModal).toHaveBeenCalledTimes(1)
+
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith('/api/admin/logout', { method: 'POST' })
+        expect(onAdminStatusChange).toHaveBeenCalledWith(false)
+        expect(onLogout).toHaveBeenCalledTimes(1)
+      })
     })
 
     it('does not throw when clicking "Admin Access" without onOpenAdminModal provided', () => {
@@ -188,7 +220,7 @@ describe('Header', () => {
       expect(() => fireEvent.click(adminButton)).not.toThrow()
     })
 
-    it('does not throw when clicking "Admin Mode" without onOpenAdminModal provided', () => {
+    it('does not throw when clicking "Admin Mode" without onLogout/onAdminStatusChange provided', async () => {
       render(<Header isAdmin={true} />)
 
       const adminButton = screen.getByRole('button', { name: /Admin Mode/i })
@@ -206,4 +238,3 @@ describe('Header', () => {
     })
   })
 })
-

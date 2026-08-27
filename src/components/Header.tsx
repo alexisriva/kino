@@ -1,14 +1,17 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShieldCheck, Lock, Search, Film, BookmarkPlus } from "lucide-react";
+import { ShieldCheck, Lock, Search, Film, BookmarkPlus, LogIn, LogOut } from "lucide-react";
 
 interface HeaderProps {
   searchQuery?: string;
   onSearchChange?: (query: string) => void;
   isAdmin?: boolean;
   onOpenAdminModal?: () => void;
+  onAdminStatusChange?: (status: boolean) => void;
+  onLogout?: () => void;
   currentView?: "journal" | "watchlist";
 }
 
@@ -17,14 +20,31 @@ export function Header({
   onSearchChange,
   isAdmin = false,
   onOpenAdminModal,
+  onAdminStatusChange,
+  onLogout,
   currentView,
 }: HeaderProps) {
   const pathname = usePathname();
+  const [isAuthBtnHovered, setIsAuthBtnHovered] = useState(false);
 
   // If currentView is explicitly provided (e.g. on post detail page), use it;
   // otherwise determine from the active route pathname.
   const isWatchlist = currentView ? currentView === "watchlist" : pathname?.startsWith("/watchlist");
   const isJournal = currentView ? currentView === "journal" : !isWatchlist;
+
+  const handleLogoutClick = async () => {
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch (err) {
+      console.error("Logout error", err);
+    }
+    if (onAdminStatusChange) {
+      onAdminStatusChange(false);
+    }
+    if (onLogout) {
+      onLogout();
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#121315]/95 backdrop-blur-md border-b border-[#292a2c]">
@@ -90,19 +110,43 @@ export function Header({
 
           {isAdmin ? (
             <button
-              onClick={() => onOpenAdminModal && onOpenAdminModal()}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/40 hover:bg-[#f2ca50]/20 text-xs font-bold font-headline transition-colors cursor-pointer"
+              onClick={handleLogoutClick}
+              onMouseEnter={() => setIsAuthBtnHovered(true)}
+              onMouseLeave={() => setIsAuthBtnHovered(false)}
+              className="flex items-center justify-center gap-2 w-10 sm:w-[130px] py-2 rounded-lg bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/40 hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/40 text-xs font-bold font-headline transition-colors cursor-pointer shrink-0"
+              title={isAuthBtnHovered ? "Logout" : "Admin Mode"}
             >
-              <ShieldCheck className="w-4 h-4" />
-              <span className="hidden sm:inline">Admin Mode</span>
+              {isAuthBtnHovered ? (
+                <>
+                  <LogOut className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span className="hidden sm:inline">Logout</span>
+                </>
+              ) : (
+                <>
+                  <ShieldCheck className="w-4 h-4 text-[#f2ca50] shrink-0" />
+                  <span className="hidden sm:inline">Admin Mode</span>
+                </>
+              )}
             </button>
           ) : (
             <button
               onClick={() => onOpenAdminModal && onOpenAdminModal()}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-[#1b1c1e] hover:bg-[#292a2c] text-[#c6c6c9] border border-[#292a2c] text-xs font-semibold font-headline transition-colors cursor-pointer"
+              onMouseEnter={() => setIsAuthBtnHovered(true)}
+              onMouseLeave={() => setIsAuthBtnHovered(false)}
+              className="flex items-center justify-center gap-2 w-10 sm:w-[130px] py-2 rounded-lg bg-[#1b1c1e] hover:bg-[#292a2c] text-[#c6c6c9] hover:text-[#e3e2e5] border border-[#292a2c] text-xs font-semibold font-headline transition-colors cursor-pointer shrink-0"
+              title={isAuthBtnHovered ? "Login" : "Admin Access"}
             >
-              <Lock className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Admin Access</span>
+              {isAuthBtnHovered ? (
+                <>
+                  <LogIn className="w-3.5 h-3.5 text-[#f2ca50] shrink-0" />
+                  <span className="hidden sm:inline">Login</span>
+                </>
+              ) : (
+                <>
+                  <Lock className="w-3.5 h-3.5 shrink-0" />
+                  <span className="hidden sm:inline">Admin Access</span>
+                </>
+              )}
             </button>
           )}
         </div>
