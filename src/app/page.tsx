@@ -6,7 +6,7 @@ import { HeroBanner } from "@/components/HeroBanner";
 import { MediaGrid } from "@/components/MediaGrid";
 import { AdminModal } from "@/components/AdminModal";
 import { getPostsAction, getFeaturedPostAction, deletePostAction } from "@/actions/postActions";
-import { Plus, Sparkles, RefreshCw } from "lucide-react";
+import { RefreshCw } from "lucide-react";
 
 const SORT_STORAGE_KEY = "kino_active_sort";
 
@@ -123,27 +123,6 @@ export default function HomePage() {
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-16">
-        {/* Admin Quick Action Floating Bar */}
-        {isAdmin && (
-          <div className="mt-6 p-4 rounded-md bg-[#1b1c1e] border border-[#292a2c] flex items-center justify-between shadow-lg">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#f2ca50] font-label">
-              <Sparkles className="w-4 h-4 text-[#f2ca50]" />
-              <span>
-                Admin Mode Active — You can now add, edit (✏️), and delete (🗑️) entries directly on each card
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                setEditingPost(null);
-                setShowAdminModal(true);
-              }}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-bold font-headline text-xs shadow-sm transition-all cursor-pointer"
-            >
-              <Plus className="w-4 h-4" /> Add New Entry
-            </button>
-          </div>
-        )}
-
         {/* Hero Spotlight (Featured Entry) — remains pinned and unaffected by grid sorting */}
         {featuredPost &&
           !searchQuery &&

@@ -116,8 +116,8 @@ export function WatchlistCard({
         </div>
 
         {/* Action Button */}
-        <div className="pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
-          {item.isWatched && item.post ? (
+        {item.isWatched && item.post ? (
+          <div className="pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
             <Link
               href={`/post/${item.post.slug}?from=watchlist&tab=watched`}
               className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#f2ca50] border border-[#f2ca50]/30 font-headline font-bold text-xs transition-colors cursor-pointer"
@@ -130,7 +130,9 @@ export function WatchlistCard({
               )}
               <ArrowRight className="w-3.5 h-3.5 ml-auto" />
             </Link>
-          ) : (
+          </div>
+        ) : isAdmin ? (
+          <div className="pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => onLogReview && onLogReview(item)}
@@ -139,8 +141,8 @@ export function WatchlistCard({
               <Edit3 className="w-3.5 h-3.5" />
               <span>Log & Review Entry</span>
             </button>
-          )}
-        </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

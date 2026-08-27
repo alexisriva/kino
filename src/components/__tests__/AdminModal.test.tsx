@@ -501,7 +501,7 @@ describe('AdminModal', () => {
       updatedAt: new Date(),
     };
 
-    it('renders watchlist banner and submits with watchlistItemId', async () => {
+    it('renders watchlist banner, hides logout button & metadata fields, and submits with watchlistItemId', async () => {
       vi.mocked(createPostAction).mockResolvedValueOnce({
         success: true,
         post: {
@@ -518,8 +518,8 @@ describe('AdminModal', () => {
           imdbRating: '8.0/10',
           userRating: 5.0,
           review: 'Poetic, philosophical cinema at its greatest.',
-          tags: '',
-          isFeatured: false,
+          tags: 'SciFi, Classics',
+          isFeatured: true,
           isPublished: true,
           likesCount: 0,
           dislikesCount: 0,
@@ -541,11 +541,29 @@ describe('AdminModal', () => {
       expect(screen.getByText(/logging watchlist item/i)).toBeInTheDocument();
       expect(screen.getByText(/publishing this review will automatically mark "solaris" as/i)).toBeInTheDocument();
       expect(screen.queryByText(/auto-fill metadata from omdb api/i)).not.toBeInTheDocument();
+      
+      // Logout button must NOT be present in modal header when logging review
+      expect(screen.queryByRole('button', { name: /logout/i })).not.toBeInTheDocument();
 
-      // Enter review
+      // Duplicate metadata inputs must NOT be present
+      expect(screen.queryByPlaceholderText(/title \(e\.g\. dune: part two\)/i)).not.toBeInTheDocument();
+      expect(screen.queryByPlaceholderText(/e\.g\. denis villeneuve/i)).not.toBeInTheDocument();
+      expect(screen.queryByPlaceholderText(/short plot description\.\.\./i)).not.toBeInTheDocument();
+
+      // Only rating, review, tags, and feature spotlight checkbox
+      expect(screen.getByText(/your star rating:/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/write your comprehensive analysis/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/masterpiece, scifi, mustwatch/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/feature on hero spotlight/i)).toBeInTheDocument();
+
+      // Enter review and tags
       fireEvent.change(screen.getByPlaceholderText(/write your comprehensive analysis/i), {
         target: { value: 'Poetic, philosophical cinema at its greatest.' },
       });
+      fireEvent.change(screen.getByPlaceholderText(/masterpiece, scifi, mustwatch/i), {
+        target: { value: 'SciFi, Classics' },
+      });
+      fireEvent.click(screen.getByLabelText(/feature on hero spotlight/i));
 
       const form = screen.getByRole('button', { name: /^publish entry$/i }).closest('form')!;
       fireEvent.submit(form);
@@ -553,8 +571,18 @@ describe('AdminModal', () => {
       await waitFor(() => {
         expect(createPostAction).toHaveBeenCalledWith(expect.objectContaining({
           title: 'Solaris',
+          mediaType: 'MOVIE',
+          releaseYear: 1972,
+          genre: 'Drama, Sci-Fi',
+          director: 'Andrei Tarkovsky',
+          cast: 'Natalya Bondarchuk, Donatas Banionis',
+          plot: 'A psychologist is sent to a space station...',
+          posterUrl: 'https://example.com/solaris.jpg',
+          imdbRating: '8.0/10',
           watchlistItemId: 'wl-item-1',
           review: 'Poetic, philosophical cinema at its greatest.',
+          tags: 'SciFi, Classics',
+          isFeatured: true,
         }));
         expect(screen.getByText('Review published & Watchlist item marked as Watched!')).toBeInTheDocument();
       });

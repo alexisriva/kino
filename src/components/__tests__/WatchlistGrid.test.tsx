@@ -312,9 +312,9 @@ describe('WatchlistGrid', () => {
     alertSpy.mockRestore()
   })
 
-  it('passes onLogReviewFromWatchlist callback to cards', async () => {
+  it('passes onLogReviewFromWatchlist callback to cards when isAdmin is true', async () => {
     const onLogReview = vi.fn()
-    render(<WatchlistGrid onLogReviewFromWatchlist={onLogReview} />)
+    render(<WatchlistGrid isAdmin={true} onLogReviewFromWatchlist={onLogReview} />)
 
     await waitFor(() => {
       expect(screen.getByText('Inception')).toBeInTheDocument()
@@ -324,5 +324,54 @@ describe('WatchlistGrid', () => {
     fireEvent.click(logButtons[0])
 
     expect(onLogReview).toHaveBeenCalledWith(mockItems[0])
+  })
+
+  it('does not render Log & Review Entry buttons when isAdmin is false', async () => {
+    render(<WatchlistGrid isAdmin={false} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Inception')).toBeInTheDocument()
+    })
+
+    expect(screen.queryByRole('button', { name: /Log & Review Entry/i })).not.toBeInTheDocument()
+  })
+
+  it('renders watched items in list view with rating and review link when tab is watched', async () => {
+    mockSearchParams = new URLSearchParams('tab=watched')
+    const mockWatchedItems = [
+      {
+        id: 'watched-1',
+        title: 'Interstellar',
+        mediaType: 'MOVIE',
+        releaseYear: 2014,
+        isWatched: true,
+        post: {
+          id: 'post-1',
+          slug: 'interstellar',
+          userRating: 5.0,
+        },
+      },
+    ]
+
+    vi.mocked(getWatchlistAction).mockResolvedValue({
+      success: true,
+      items: mockWatchedItems as any,
+      unwatchedCount: 1,
+      watchedCount: 1,
+    })
+
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Interstellar')).toBeInTheDocument()
+    })
+
+    expect(screen.getByText('(2014)')).toBeInTheDocument()
+    expect(screen.getByText('5.0')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /Read Review/i })).toHaveAttribute(
+      'href',
+      '/post/interstellar?from=watchlist&tab=watched'
+    )
+    expect(screen.getByTitle('Delete Watchlist Item')).toBeInTheDocument()
   })
 })

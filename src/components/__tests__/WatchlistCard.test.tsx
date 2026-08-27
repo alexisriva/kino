@@ -37,8 +37,8 @@ describe('WatchlistCard', () => {
     },
   }
 
-  it('renders queued item information correctly', () => {
-    render(<WatchlistCard item={mockQueuedItem} />)
+  it('renders queued item information correctly (without log review button when not admin)', () => {
+    render(<WatchlistCard item={mockQueuedItem} isAdmin={false} />)
 
     expect(screen.getByRole('heading', { name: 'Dune: Part Two' })).toBeInTheDocument()
     expect(screen.getByText('2024')).toBeInTheDocument()
@@ -51,14 +51,15 @@ describe('WatchlistCard', () => {
 
     const poster = screen.getByRole('img', { name: 'Dune: Part Two' })
     expect(poster).toHaveAttribute('src', 'https://example.com/dune2.jpg')
-    expect(screen.getByRole('button', { name: /Log & Review Entry/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /Log & Review Entry/i })).not.toBeInTheDocument()
   })
 
-  it('calls onLogReview when Log & Review Entry button is clicked', () => {
+  it('calls onLogReview when Log & Review Entry button is clicked in admin mode', () => {
     const onLogReview = vi.fn()
-    render(<WatchlistCard item={mockQueuedItem} onLogReview={onLogReview} />)
+    render(<WatchlistCard item={mockQueuedItem} isAdmin={true} onLogReview={onLogReview} />)
 
     const button = screen.getByRole('button', { name: /Log & Review Entry/i })
+    expect(button).toBeInTheDocument()
     fireEvent.click(button)
 
     expect(onLogReview).toHaveBeenCalledTimes(1)
@@ -124,12 +125,22 @@ describe('WatchlistCard', () => {
     expect(screen.queryByText(/by/i)).not.toBeInTheDocument()
   })
 
-  it('renders watched item without post by falling back to log review button', () => {
+  it('does not show log review button for watched item without post when not admin', () => {
     const watchedWithoutPost = {
       ...mockWatchedItem,
       post: null,
     }
-    render(<WatchlistCard item={watchedWithoutPost} />)
+    render(<WatchlistCard item={watchedWithoutPost} isAdmin={false} />)
+
+    expect(screen.queryByRole('button', { name: /Log & Review Entry/i })).not.toBeInTheDocument()
+  })
+
+  it('renders log review button for watched item without post when admin', () => {
+    const watchedWithoutPost = {
+      ...mockWatchedItem,
+      post: null,
+    }
+    render(<WatchlistCard item={watchedWithoutPost} isAdmin={true} />)
 
     expect(screen.getByRole('button', { name: /Log & Review Entry/i })).toBeInTheDocument()
   })

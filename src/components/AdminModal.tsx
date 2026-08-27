@@ -313,15 +313,17 @@ export function AdminModal({
                 </h2>
               </div>
 
-              {/* Header Right Actions: Logout & Close */}
+              {/* Header Right Actions: Logout (if not logging watchlist) & Close */}
               <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xs font-medium border border-rose-500/30 transition-colors cursor-pointer"
-                >
-                  <LogOut className="w-3.5 h-3.5" /> Logout
-                </button>
+                {!watchlistItem && (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 text-xs font-medium border border-rose-500/30 transition-colors cursor-pointer"
+                  >
+                    <LogOut className="w-3.5 h-3.5" /> Logout
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={onClose}
@@ -454,119 +456,124 @@ export function AdminModal({
 
             {/* Entry Form */}
             <form onSubmit={handleSubmitPost} className="space-y-4 font-label">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Title *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Title (e.g. Dune: Part Two)"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                </div>
+              {/* Metadata Fields (only when creating/editing standalone post, hidden for watchlist review logging) */}
+              {!watchlistItem && (
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Title *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Title (e.g. Dune: Part Two)"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Media Category
-                  </label>
-                  <select
-                    value={mediaType}
-                    onChange={(e) => setMediaType(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] cursor-pointer"
-                  >
-                    <option value="MOVIE">Movie</option>
-                    <option value="TV">TV Series</option>
-                    <option value="DOCUMENTARY">Documentary</option>
-                    <option value="ANIME">Anime</option>
-                  </select>
-                </div>
-              </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Media Category
+                      </label>
+                      <select
+                        value={mediaType}
+                        onChange={(e) => setMediaType(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] cursor-pointer"
+                      >
+                        <option value="MOVIE">Movie</option>
+                        <option value="TV">TV Series</option>
+                        <option value="DOCUMENTARY">Documentary</option>
+                        <option value="ANIME">Anime</option>
+                      </select>
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Release Year
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="e.g. 2024"
-                    value={releaseYear}
-                    onChange={(e) => setReleaseYear(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Release Year
+                      </label>
+                      <input
+                        type="number"
+                        placeholder="e.g. 2024"
+                        value={releaseYear}
+                        onChange={(e) => setReleaseYear(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Genre
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Sci-Fi, Drama"
-                    value={genre}
-                    onChange={(e) => setGenre(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Genre
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Sci-Fi, Drama"
+                        value={genre}
+                        onChange={(e) => setGenre(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Director
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Denis Villeneuve"
-                    value={director}
-                    onChange={(e) => setDirector(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                </div>
-              </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Director
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Denis Villeneuve"
+                        value={director}
+                        onChange={(e) => setDirector(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                      />
+                    </div>
+                  </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Main Cast
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Timothée Chalamet, Zendaya"
-                    value={cast}
-                    onChange={(e) => setCast(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Main Cast
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Timothée Chalamet, Zendaya"
+                        value={cast}
+                        onChange={(e) => setCast(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                      />
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                    Poster URL
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="https://image-url.jpg"
-                    value={posterUrl}
-                    onChange={(e) => setPosterUrl(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
-                  />
-                </div>
-              </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                        Poster URL
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="https://image-url.jpg"
+                        value={posterUrl}
+                        onChange={(e) => setPosterUrl(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                      />
+                    </div>
+                  </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
-                  Plot Summary
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="Short plot description..."
-                  value={plot}
-                  onChange={(e) => setPlot(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
-                />
-              </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#c6c6c9] mb-1">
+                      Plot Summary
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="Short plot description..."
+                      value={plot}
+                      onChange={(e) => setPlot(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-md bg-[#121315] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50]"
+                    />
+                  </div>
+                </>
+              )}
 
               {/* Your Star Rating */}
               <div className="flex flex-wrap items-center justify-between gap-4 p-3.5 rounded-md bg-[#121315] border border-[#292a2c]">

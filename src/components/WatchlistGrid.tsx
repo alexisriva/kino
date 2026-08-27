@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { WatchlistCard } from "./WatchlistCard";
+import { WatchedListItem } from "./WatchedListItem";
 import { AddWatchlistModal } from "./AddWatchlistModal";
 import {
   getWatchlistAction,
@@ -174,17 +175,30 @@ export function WatchlistGrid({
           <p className="text-xs font-semibold">Loading Watchlist Items...</p>
         </div>
       ) : items.length > 0 ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {items.map((item) => (
-            <WatchlistCard
-              key={item.id}
-              item={item}
-              isAdmin={isAdmin}
-              onLogReview={onLogReviewFromWatchlist}
-              onDelete={handleDelete}
-            />
-          ))}
-        </div>
+        isWatchedTab ? (
+          <div className="divide-y divide-[#292a2c] rounded-lg bg-[#1b1c1e] border border-[#292a2c] overflow-hidden">
+            {items.map((item) => (
+              <WatchedListItem
+                key={item.id}
+                item={item}
+                isAdmin={isAdmin}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            {items.map((item) => (
+              <WatchlistCard
+                key={item.id}
+                item={item}
+                isAdmin={isAdmin}
+                onLogReview={onLogReviewFromWatchlist}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+        )
       ) : (
         <div className="w-full p-12 text-center rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-8 font-label">
           <Film className="w-12 h-12 text-[#99907c] mx-auto mb-3 stroke-[1.5]" />
