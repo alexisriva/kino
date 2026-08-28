@@ -2,6 +2,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { WatchlistGrid } from '@/components/WatchlistGrid'
 import { getWatchlistAction, deleteWatchlistItemAction } from '@/actions/watchlistActions'
+import {
+  getWatchRequestsAction,
+  acceptWatchRequestAction,
+  rejectWatchRequestAction,
+} from '@/actions/requestActions'
 
 const mockReplace = vi.fn()
 let mockSearchParams = new URLSearchParams()
@@ -22,11 +27,26 @@ vi.mock('@/actions/watchlistActions', () => ({
   deleteWatchlistItemAction: vi.fn(),
 }))
 
+vi.mock('@/actions/requestActions', () => ({
+  getWatchRequestsAction: vi.fn(),
+  acceptWatchRequestAction: vi.fn(),
+  rejectWatchRequestAction: vi.fn(),
+}))
+
 vi.mock('@/components/AddWatchlistModal', () => ({
   AddWatchlistModal: ({ onClose, onAdded }: { onClose: () => void; onAdded: () => void }) => (
     <div data-testid="add-watchlist-modal">
       <button onClick={onClose}>Close Modal</button>
       <button onClick={onAdded}>Confirm Added</button>
+    </div>
+  ),
+}))
+
+vi.mock('@/components/RequestMediaModal', () => ({
+  RequestMediaModal: ({ onClose, onRequestSubmitted }: { onClose: () => void; onRequestSubmitted?: () => void }) => (
+    <div data-testid="request-media-modal">
+      <button onClick={onClose}>Close Request Modal</button>
+      <button onClick={onRequestSubmitted}>Confirm Submitted</button>
     </div>
   ),
 }))
@@ -63,6 +83,25 @@ describe('WatchlistGrid', () => {
     },
   ]
 
+  const mockRequests = [
+    {
+      id: 'req-1',
+      title: 'Severance',
+      mediaType: 'TV',
+      releaseYear: 2022,
+      genre: 'Sci-Fi, Thriller',
+      director: 'Ben Stiller',
+      cast: 'Adam Scott',
+      plot: 'Mark leads a team of office workers whose memories have been surgically divided.',
+      posterUrl: 'https://example.com/severance.jpg',
+      imdbRating: '8.7',
+      requesterName: 'Alice',
+      requesterNote: 'Mindblowing TV series!',
+      requestCount: 4,
+      createdAt: new Date(),
+    },
+  ]
+
   beforeEach(() => {
     vi.clearAllMocks()
     mockSearchParams = new URLSearchParams()
@@ -71,9 +110,39 @@ describe('WatchlistGrid', () => {
       items: mockItems as any,
       unwatchedCount: 2,
       watchedCount: 5,
+      requestsCount: 1,
     })
     vi.mocked(deleteWatchlistItemAction).mockResolvedValue({
       success: true,
+    })
+    vi.mocked(getWatchRequestsAction).mockResolvedValue({
+      success: true,
+      items: mockRequests as any,
+      totalCount: 1,
+    })
+    vi.mocked(acceptWatchRequestAction).mockResolvedValue({
+      success: true,
+      message: 'Added to watchlist',
+      watchlistItem: {
+        id: 'item-new',
+        title: 'Severance',
+        mediaType: 'TV',
+        releaseYear: 2022,
+        genre: 'Sci-Fi',
+        director: 'Ben Stiller',
+        cast: 'Adam Scott',
+        plot: 'Divided memories',
+        posterUrl: 'https://example.com/severance.jpg',
+        imdbRating: '8.7',
+        isWatched: false,
+        postId: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    })
+    vi.mocked(rejectWatchRequestAction).mockResolvedValue({
+      success: true,
+      message: 'Rejected and removed',
     })
   })
 
@@ -96,8 +165,30 @@ describe('WatchlistGrid', () => {
     })
   })
 
+  it('renders Request a Title button for all visitors and opens RequestMediaModal', async () => {
+    render(<WatchlistGrid isAdmin={false} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Inception')).toBeInTheDocument()
+    })
+
+    const requestBtn = screen.getByRole('button', { name: /Request a Title/i })
+    expect(requestBtn).toBeInTheDocument()
+
+    fireEvent.click(requestBtn)
+    expect(screen.getByTestId('request-media-modal')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByText('Confirm Submitted'))
+    await waitFor(() => {
+      expect(getWatchlistAction).toHaveBeenCalledTimes(2)
+    })
+
+    fireEvent.click(screen.getByText('Close Request Modal'))
+    expect(screen.queryByTestId('request-media-modal')).not.toBeInTheDocument()
+  })
+
   it('changes tab and calls router.replace when tab buttons are clicked', async () => {
-    render(<WatchlistGrid />)
+    render(<WatchlistGrid isAdmin={true} />)
 
     await waitFor(() => {
       expect(screen.getByText('Inception')).toBeInTheDocument()
@@ -105,13 +196,129 @@ describe('WatchlistGrid', () => {
 
     const watchedTabButton = screen.getByRole('button', { name: /Watched & Logged/i })
     fireEvent.click(watchedTabButton)
-
     expect(mockReplace).toHaveBeenCalledWith('/watchlist?tab=watched')
+
+    const requestsTabButton = screen.getByRole('button', { name: /Requests/i })
+    fireEvent.click(requestsTabButton)
+    expect(mockReplace).toHaveBeenCalledWith('/watchlist?tab=requests')
 
     const queuedTabButton = screen.getByRole('button', { name: /Queued/i })
     fireEvent.click(queuedTabButton)
-
     expect(mockReplace).toHaveBeenCalledWith('/watchlist')
+  })
+
+  it('renders Requests tab when isAdmin is true and tab=requests', async () => {
+    mockSearchParams = new URLSearchParams('tab=requests')
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Severance')).toBeInTheDocument()
+      expect(screen.getByText(/4 Requests/i)).toBeInTheDocument()
+      expect(screen.getByText(/Requested by Alice/i)).toBeInTheDocument();
+    })
+
+    expect(getWatchRequestsAction).toHaveBeenCalledWith({
+      category: 'ALL',
+      search: '',
+    })
+  })
+
+  it('allows admin to accept a request in the requests tab', async () => {
+    mockSearchParams = new URLSearchParams('tab=requests')
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Severance')).toBeInTheDocument()
+    })
+
+    const acceptBtn = screen.getByRole('button', { name: /accept/i })
+    fireEvent.click(acceptBtn)
+
+    await waitFor(() => {
+      expect(acceptWatchRequestAction).toHaveBeenCalledWith('req-1')
+      expect(getWatchRequestsAction).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  it('alerts error when accepting a request fails', async () => {
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
+    vi.mocked(acceptWatchRequestAction).mockResolvedValueOnce({
+      success: false,
+      error: 'Failed to accept request',
+    })
+
+    mockSearchParams = new URLSearchParams('tab=requests')
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Severance')).toBeInTheDocument()
+    })
+
+    const acceptBtn = screen.getByRole('button', { name: /accept/i })
+    fireEvent.click(acceptBtn)
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith('Failed to accept request')
+    })
+    alertSpy.mockRestore()
+  })
+
+  it('allows admin to reject a request in the requests tab', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    mockSearchParams = new URLSearchParams('tab=requests')
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Severance')).toBeInTheDocument()
+    })
+
+    const rejectBtn = screen.getByRole('button', { name: /reject/i })
+    fireEvent.click(rejectBtn)
+
+    await waitFor(() => {
+      expect(rejectWatchRequestAction).toHaveBeenCalledWith('req-1')
+      expect(getWatchRequestsAction).toHaveBeenCalledTimes(2)
+    })
+  })
+
+  it('alerts error when rejecting a request fails', async () => {
+    vi.spyOn(window, 'confirm').mockReturnValue(true)
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {})
+    vi.mocked(rejectWatchRequestAction).mockResolvedValueOnce({
+      success: false,
+      error: 'Failed to reject request',
+    })
+
+    mockSearchParams = new URLSearchParams('tab=requests')
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('Severance')).toBeInTheDocument()
+    })
+
+    const rejectBtn = screen.getByRole('button', { name: /reject/i })
+    fireEvent.click(rejectBtn)
+
+    await waitFor(() => {
+      expect(alertSpy).toHaveBeenCalledWith('Failed to reject request')
+    })
+    alertSpy.mockRestore()
+  })
+
+  it('renders empty state when no requests exist', async () => {
+    vi.mocked(getWatchRequestsAction).mockResolvedValueOnce({
+      success: true,
+      items: [],
+      totalCount: 0,
+    })
+
+    mockSearchParams = new URLSearchParams('tab=requests')
+    render(<WatchlistGrid isAdmin={true} />)
+
+    await waitFor(() => {
+      expect(screen.getByText('No Pending Watch Requests')).toBeInTheDocument()
+      expect(screen.getByText(/Viewer requests will appear here/i)).toBeInTheDocument()
+    })
   })
 
   it('filters by category when category pills are clicked', async () => {
@@ -168,6 +375,7 @@ describe('WatchlistGrid', () => {
       items: [],
       unwatchedCount: 0,
       watchedCount: 3,
+      requestsCount: 0,
     })
 
     render(<WatchlistGrid />)
@@ -185,6 +393,7 @@ describe('WatchlistGrid', () => {
       items: [],
       unwatchedCount: 2,
       watchedCount: 0,
+      requestsCount: 0,
     })
 
     render(<WatchlistGrid />)
@@ -358,6 +567,7 @@ describe('WatchlistGrid', () => {
       items: mockWatchedItems as any,
       unwatchedCount: 1,
       watchedCount: 1,
+      requestsCount: 0,
     })
 
     render(<WatchlistGrid isAdmin={true} />)

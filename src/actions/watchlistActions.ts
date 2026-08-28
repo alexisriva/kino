@@ -136,11 +136,14 @@ export async function getWatchlistAction(params?: {
       where: { isWatched: true },
     });
 
+    const requestsCount = await prisma.watchRequest.count();
+
     return {
       success: true,
       items,
       unwatchedCount,
       watchedCount,
+      requestsCount,
     };
   } catch (error: any) {
     console.error('Error fetching watchlist:', error);
