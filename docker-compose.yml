@@ -1,0 +1,30 @@
+services:
+  kino:
+    image: ${IMAGE_NAME:-ghcr.io/alexisriva/kino:latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: kino
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=file:/app/prisma/prod.db
+    volumes:
+      - /var/data/kino:/app/prisma
+    networks:
+      - gateway_net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=gateway_net"
+      - "traefik.http.routers.kino.rule=Host(`${SERVER_HOST}`)"
+      - "traefik.http.routers.kino.entrypoints=websecure"
+      - "traefik.http.routers.kino.tls=true"
+      - "traefik.http.routers.kino.tls.certresolver=myresolver"
+      - "traefik.http.services.kino.loadbalancer.server.port=3000"
+
+networks:
+  gateway_net:
+    external: true
