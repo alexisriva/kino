@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Star, Pencil, Check, RefreshCw, Tag, X } from "lucide-react";
+import { BookOpen, Pencil, Check, RefreshCw, Tag, X } from "lucide-react";
 import { updatePostAction } from "@/actions/postActions";
 
 interface EditableJournalReviewProps {
@@ -84,7 +84,7 @@ export function EditableJournalReview({
       {/* Header with Title and Edit Icon Button (Admin Only) */}
       <div className="flex items-center justify-between border-b border-[#292a2c] pb-3 sm:pb-4 gap-2">
         <h2 className="font-headline text-lg sm:text-2xl font-bold text-[#e3e2e5] flex items-center gap-2">
-          <Star className="w-4 sm:w-5 h-4 sm:h-5 text-[#f2ca50] fill-[#f2ca50] shrink-0" /> Journal
+          <BookOpen className="w-4 sm:w-5 h-4 sm:h-5 text-[#f2ca50] shrink-0" /> Journal
           Entry & Critical Review
         </h2>
 
