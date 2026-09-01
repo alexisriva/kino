@@ -11,7 +11,6 @@ function WatchlistContent() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [loggingWatchlistItem, setLoggingWatchlistItem] = useState<any>(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   // Check admin status
   useEffect(() => {
@@ -36,8 +35,6 @@ function WatchlistContent() {
     <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Top Header */}
       <Header
-        searchQuery={searchQuery}
-        onSearchChange={(q) => setSearchQuery(q)}
         isAdmin={isAdmin}
         onAdminStatusChange={(status) => setIsAdmin(status)}
         onOpenAdminModal={() => {
@@ -52,7 +49,6 @@ function WatchlistContent() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-16">
         <WatchlistGrid
           isAdmin={isAdmin}
-          searchQuery={searchQuery}
           onLogReviewFromWatchlist={handleLogWatchlistItem}
         />
       </main>

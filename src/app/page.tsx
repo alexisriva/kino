@@ -17,7 +17,6 @@ export default function HomePage() {
 
   // Filters
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedTag, setSelectedTag] = useState("");
   const [activeSort, setActiveSort] = useState("latest");
 
@@ -60,7 +59,6 @@ export default function HomePage() {
     setLoading(true);
     const res = await getPostsAction({
       category: activeCategory,
-      search: searchQuery,
       tag: selectedTag,
       sort: activeSort,
     });
@@ -76,7 +74,7 @@ export default function HomePage() {
 
   useEffect(() => {
     loadPosts();
-  }, [activeCategory, searchQuery, selectedTag, activeSort]);
+  }, [activeCategory, selectedTag, activeSort]);
 
   // Check admin status
   useEffect(() => {
@@ -112,8 +110,6 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Top Header */}
       <Header
-        searchQuery={searchQuery}
-        onSearchChange={(q) => setSearchQuery(q)}
         isAdmin={isAdmin}
         onAdminStatusChange={(status) => setIsAdmin(status)}
         onOpenAdminModal={() => {
@@ -128,7 +124,6 @@ export default function HomePage() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-16">
         {/* Hero Spotlight (Featured Entry) — remains pinned and unaffected by grid sorting */}
         {featuredPost &&
-          !searchQuery &&
           !selectedTag &&
           activeCategory === "ALL" && <HeroBanner post={featuredPost} />}
 

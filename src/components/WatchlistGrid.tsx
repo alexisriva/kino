@@ -28,13 +28,11 @@ import {
 
 interface WatchlistGridProps {
   isAdmin?: boolean;
-  searchQuery?: string;
   onLogReviewFromWatchlist?: (item: any) => void;
 }
 
 export function WatchlistGrid({
   isAdmin = false,
-  searchQuery = "",
   onLogReviewFromWatchlist,
 }: WatchlistGridProps) {
   const searchParams = useSearchParams();
@@ -80,7 +78,6 @@ export function WatchlistGrid({
       // Load watch requests for admin
       const reqRes = await getWatchRequestsAction({
         category: activeCategory,
-        search: searchQuery,
       });
 
       // Also get watchlist counts to keep tab headers accurate
@@ -102,7 +99,6 @@ export function WatchlistGrid({
       const res = await getWatchlistAction({
         isWatched: isWatchedTab,
         category: activeCategory,
-        search: searchQuery,
       });
 
       if (res.success) {
@@ -119,7 +115,7 @@ export function WatchlistGrid({
 
   useEffect(() => {
     loadData();
-  }, [isRequestsTab, isWatchedTab, activeCategory, searchQuery, isAdmin]);
+  }, [isRequestsTab, isWatchedTab, activeCategory, isAdmin]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this watchlist item?"))

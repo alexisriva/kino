@@ -114,51 +114,7 @@ describe('Header', () => {
     })
   })
 
-  describe('Search Input', () => {
-    it('renders the search input with searchQuery and calls onSearchChange on user input', () => {
-      const onSearchChange = vi.fn()
-      render(
-        <Header
-          searchQuery="Inception"
-          onSearchChange={onSearchChange}
-          currentView="journal"
-        />
-      )
 
-      const searchInput = screen.getByPlaceholderText('Search reviews...')
-      expect(searchInput).toBeInTheDocument()
-      expect(searchInput).toHaveValue('Inception')
-
-      fireEvent.change(searchInput, { target: { value: 'Interstellar' } })
-      expect(onSearchChange).toHaveBeenCalledTimes(1)
-      expect(onSearchChange).toHaveBeenCalledWith('Interstellar')
-    })
-
-    it('uses empty string as default searchQuery when searchQuery prop is omitted', () => {
-      render(<Header onSearchChange={vi.fn()} />)
-
-      const searchInput = screen.getByPlaceholderText('Search reviews...')
-      expect(searchInput).toHaveValue('')
-    })
-
-    it('renders "Search watchlist..." placeholder when viewing watchlist', () => {
-      render(
-        <Header
-          onSearchChange={vi.fn()}
-          currentView="watchlist"
-        />
-      )
-
-      expect(screen.getByPlaceholderText('Search watchlist...')).toBeInTheDocument()
-    })
-
-    it('does not render search input when onSearchChange is not provided', () => {
-      render(<Header searchQuery="Matrix" />)
-
-      expect(screen.queryByRole('textbox')).not.toBeInTheDocument()
-      expect(screen.queryByPlaceholderText(/Search/i)).not.toBeInTheDocument()
-    })
-  })
 
   describe('Admin Control & Hover / Click Behaviors', () => {
     it('renders "Admin Access" when isAdmin is false, changes to "Login" on hover, and opens admin modal on click', () => {

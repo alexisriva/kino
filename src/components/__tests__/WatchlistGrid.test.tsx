@@ -161,7 +161,6 @@ describe('WatchlistGrid', () => {
     expect(getWatchlistAction).toHaveBeenCalledWith({
       isWatched: false,
       category: 'ALL',
-      search: '',
     })
   })
 
@@ -219,7 +218,6 @@ describe('WatchlistGrid', () => {
 
     expect(getWatchRequestsAction).toHaveBeenCalledWith({
       category: 'ALL',
-      search: '',
     })
   })
 
@@ -335,7 +333,6 @@ describe('WatchlistGrid', () => {
       expect(getWatchlistAction).toHaveBeenCalledWith({
         isWatched: false,
         category: 'MOVIE',
-        search: '',
       })
     })
 
@@ -346,25 +343,6 @@ describe('WatchlistGrid', () => {
       expect(getWatchlistAction).toHaveBeenCalledWith({
         isWatched: false,
         category: 'TV',
-        search: '',
-      })
-    })
-  })
-
-  it('re-fetches when searchQuery prop changes', async () => {
-    const { rerender } = render(<WatchlistGrid searchQuery="" />)
-
-    await waitFor(() => {
-      expect(screen.getByText('Inception')).toBeInTheDocument()
-    })
-
-    rerender(<WatchlistGrid searchQuery="Nolan" />)
-
-    await waitFor(() => {
-      expect(getWatchlistAction).toHaveBeenCalledWith({
-        isWatched: false,
-        category: 'ALL',
-        search: 'Nolan',
       })
     })
   })
@@ -406,7 +384,6 @@ describe('WatchlistGrid', () => {
     expect(getWatchlistAction).toHaveBeenCalledWith({
       isWatched: true,
       category: 'ALL',
-      search: '',
     })
   })
 
