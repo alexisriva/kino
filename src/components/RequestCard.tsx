@@ -81,14 +81,14 @@ export function RequestCard({ item, onAccept, onReject }: RequestCardProps) {
       </div>
 
       {/* Card Info Content */}
-      <div className="p-4 flex flex-col flex-1 justify-between space-y-3 font-label">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-2">
-            <h4 className="font-headline text-base font-bold text-[#e3e2e5] line-clamp-1">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between space-y-2.5 sm:space-y-3 font-label">
+        <div className="space-y-1.5 sm:space-y-2">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+            <h4 className="font-headline text-sm sm:text-base font-bold text-[#e3e2e5] line-clamp-1">
               {item.title}
             </h4>
             {item.releaseYear && (
-              <span className="text-xs font-semibold text-[#99907c]">{item.releaseYear}</span>
+              <span className="text-[11px] sm:text-xs font-semibold text-[#99907c] shrink-0">{item.releaseYear}</span>
             )}
           </div>
 
@@ -130,12 +130,12 @@ export function RequestCard({ item, onAccept, onReject }: RequestCardProps) {
         </div>
 
         {/* Admin Accept & Reject Action Buttons */}
-        <div className="pt-3 border-t border-[#292a2c] flex items-center gap-2">
+        <div className="pt-2 sm:pt-3 border-t border-[#292a2c] flex items-center gap-2">
           <button
             type="button"
             disabled={processingAccept || processingReject}
             onClick={handleAccept}
-            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] disabled:opacity-50 text-[#121315] font-headline font-bold text-xs shadow-sm transition-all cursor-pointer"
+            className="flex-1 flex items-center justify-center gap-1.5 px-3 py-1.5 sm:py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] disabled:opacity-50 text-[#121315] font-headline font-bold text-xs shadow-sm transition-all cursor-pointer"
             title="Accept request and add to watchlist queue"
           >
             {processingAccept ? (
@@ -150,7 +150,7 @@ export function RequestCard({ item, onAccept, onReject }: RequestCardProps) {
             type="button"
             disabled={processingAccept || processingReject}
             onClick={handleReject}
-            className="flex items-center justify-center gap-1 px-3 py-2 rounded-md bg-[#121315] hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 border border-rose-500/30 disabled:opacity-50 font-headline font-bold text-xs transition-all cursor-pointer"
+            className="flex items-center justify-center gap-1 px-3 py-1.5 sm:py-2 rounded-md bg-[#121315] hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 border border-rose-500/30 disabled:opacity-50 font-headline font-bold text-xs transition-all cursor-pointer"
             title="Reject and delete request"
           >
             {processingReject ? (

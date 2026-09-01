@@ -62,7 +62,7 @@ export function ShareModal({ title, slug }: ShareModalProps) {
     <>
       <button
         onClick={handleNativeShare}
-        className="flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-white border border-[#292a2c] text-xs font-semibold font-label transition-all cursor-pointer"
+        className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1 rounded-sm bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-white border border-[#292a2c] text-xs font-semibold font-label transition-all cursor-pointer shrink-0"
         title="Share review"
       >
         <Share2 className="w-3.5 h-3.5" />
@@ -70,11 +70,11 @@ export function ShareModal({ title, slug }: ShareModalProps) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-md p-6 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md">
+          <div className="relative w-full max-w-md p-4 sm:p-6 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-[#99907c] hover:text-white transition-colors cursor-pointer"
+              className="absolute top-3 sm:top-4 right-3 sm:right-4 text-[#99907c] hover:text-white transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>

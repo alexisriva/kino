@@ -103,17 +103,17 @@ export function MediaCard({
       </Link>
 
       {/* Card Info Content */}
-      <div className="p-4 flex flex-col flex-1 justify-between space-y-3">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between space-y-2.5 sm:space-y-3">
         <div>
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
             <Link
               href={`/post/${post.slug}`}
-              className="font-headline text-base font-bold text-[#e3e2e5] hover:text-[#f2ca50] transition-colors line-clamp-1 cursor-pointer"
+              className="font-headline text-sm sm:text-base font-bold text-[#e3e2e5] hover:text-[#f2ca50] transition-colors line-clamp-1 cursor-pointer"
             >
               {post.title}
             </Link>
             {post.releaseYear && (
-              <span className="text-xs font-semibold text-[#99907c] font-label">
+              <span className="text-[11px] sm:text-xs font-semibold text-[#99907c] font-label shrink-0">
                 {post.releaseYear}
               </span>
             )}
@@ -130,11 +130,11 @@ export function MediaCard({
 
           {/* Tags */}
           {tagsList.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2 font-label">
+            <div className="flex flex-wrap gap-1 mt-1.5 sm:mt-2 font-label">
               {tagsList.slice(0, 2).map((tag, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-sm bg-[#292a2c] text-[#c6c6c9]"
+                  className="inline-flex items-center text-[10px] font-medium px-1.5 sm:px-2 py-0.5 rounded-sm bg-[#292a2c] text-[#c6c6c9] max-w-full truncate"
                 >
                   #{tag.trim()}
                 </span>
@@ -144,7 +144,7 @@ export function MediaCard({
         </div>
 
         {/* Footer Actions & Admin Toolbar */}
-        <div className="pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
+        <div className="pt-2 sm:pt-3 border-t border-[#292a2c] flex items-center justify-between gap-1 sm:gap-2">
           <LikeDislikeButtons
             postId={post.id}
             initialLikes={post.likesCount}

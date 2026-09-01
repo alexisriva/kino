@@ -166,11 +166,11 @@ export function AdminModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto font-label">
-      <div className="relative w-full max-w-2xl my-8 p-6 sm:p-8 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto font-label">
+      <div className="relative w-full max-w-2xl my-auto p-4 sm:p-6 md:p-8 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl max-h-[90dvh] overflow-y-auto">
         {/* LOGIN FORM IF NOT AUTHENTICATED */}
         {!isAdmin ? (
-          <div className="relative max-w-md mx-auto text-center space-y-6 py-4 font-label">
+          <div className="relative max-w-md mx-auto text-center space-y-4 sm:space-y-6 py-2 sm:py-4 font-label">
             <button
               onClick={onClose}
               className="absolute -top-2 -right-2 text-[#99907c] hover:text-white p-1 rounded-md transition-colors cursor-pointer"
@@ -179,12 +179,12 @@ export function AdminModal({
               <X className="w-5 h-5" />
             </button>
 
-            <div className="w-12 h-12 rounded-md bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30 flex items-center justify-center mx-auto">
-              <Lock className="w-6 h-6" />
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-md bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30 flex items-center justify-center mx-auto">
+              <Lock className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
 
             <div>
-              <h2 className="font-headline text-2xl font-bold text-[#e3e2e5]">
+              <h2 className="font-headline text-xl sm:text-2xl font-bold text-[#e3e2e5]">
                 Admin Credentials Required
               </h2>
               <p className="text-xs text-[#99907c] mt-1">
@@ -225,11 +225,11 @@ export function AdminModal({
           </div>
         ) : (
           /* POST EDITOR FORM (ONLY FOR WATCHLIST LOGGING OR EDITING EXISTING POST) */
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-[#292a2c] pb-4">
+          <div className="space-y-4 sm:space-y-6">
+            <div className="flex items-center justify-between border-b border-[#292a2c] pb-3 sm:pb-4">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-6 h-6 text-[#f2ca50]" />
-                <h2 className="font-headline text-xl font-bold text-[#e3e2e5]">
+                <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6 text-[#f2ca50] shrink-0" />
+                <h2 className="font-headline text-lg sm:text-xl font-bold text-[#e3e2e5]">
                   {editingPost
                     ? "Edit Journal Entry"
                     : `Log Review for "${watchlistItem?.title}"`}
@@ -240,7 +240,7 @@ export function AdminModal({
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer"
+                className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer shrink-0"
                 title="Close modal"
               >
                 <X className="w-5 h-5" />

@@ -73,12 +73,12 @@ export function LikeDislikeButtons({
     size === "sm" ? "w-3.5 h-3.5" : size === "lg" ? "w-4 h-4" : "w-3.5 h-3.5";
 
   return (
-    <div className="inline-flex items-center gap-2 font-label">
+    <div className="inline-flex items-center gap-1.5 sm:gap-2 font-label shrink-0">
       {/* Like Button */}
       <button
         onClick={() => handleVote("LIKE")}
         disabled={loading}
-        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 cursor-pointer ${btnPadding} ${
+        className={`flex items-center gap-1 sm:gap-1.5 rounded-sm transition-all duration-200 cursor-pointer shrink-0 ${btnPadding} ${
           userVote === "LIKE"
             ? "bg-[#f2ca50]/20 text-[#f2ca50] border border-[#f2ca50]/50"
             : "bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-[#f2ca50] border border-[#292a2c]"
@@ -95,7 +95,7 @@ export function LikeDislikeButtons({
       <button
         onClick={() => handleVote("DISLIKE")}
         disabled={loading}
-        className={`flex items-center gap-1.5 rounded-sm transition-all duration-200 cursor-pointer ${btnPadding} ${
+        className={`flex items-center gap-1 sm:gap-1.5 rounded-sm transition-all duration-200 cursor-pointer shrink-0 ${btnPadding} ${
           userVote === "DISLIKE"
             ? "bg-rose-500/20 text-rose-400 border border-rose-500/50"
             : "bg-[#1b1c1e] text-[#c6c6c9] hover:bg-[#292a2c] hover:text-rose-400 border border-[#292a2c]"

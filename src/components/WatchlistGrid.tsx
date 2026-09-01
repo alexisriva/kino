@@ -151,15 +151,15 @@ export function WatchlistGrid({
   };
 
   return (
-    <section className="w-full my-8 space-y-6">
+    <section className="w-full my-6 sm:my-8 space-y-4 sm:space-y-6">
       {/* Top Banner Toolbar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-lg bg-[#1b1c1e] border border-[#292a2c]">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-md bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30">
+          <div className="p-2 sm:p-2.5 rounded-md bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30 shrink-0">
             <BookmarkPlus className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-headline text-lg font-bold text-[#e3e2e5]">
+            <h3 className="font-headline text-base sm:text-lg font-bold text-[#e3e2e5]">
               Personal Media Watchlist
             </h3>
             <p className="text-xs text-[#99907c] font-label">
@@ -169,11 +169,11 @@ export function WatchlistGrid({
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2 w-full sm:w-auto flex-wrap sm:flex-nowrap">
           {/* Request a Title Button (Available to all visitors and admin) */}
           <button
             onClick={() => setShowRequestModal(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#f2ca50] border border-[#f2ca50]/40 font-headline font-bold text-xs shadow-sm transition-all cursor-pointer shrink-0"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#f2ca50] border border-[#f2ca50]/40 font-headline font-bold text-xs shadow-sm transition-all cursor-pointer shrink-0"
           >
             <Send className="w-3.5 h-3.5" /> Request a Title
           </button>
@@ -182,7 +182,7 @@ export function WatchlistGrid({
           {isAdmin && (
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer shrink-0"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 px-4 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer shrink-0"
             >
               <BookmarkPlus className="w-4 h-4" /> Add to Watchlist
             </button>
@@ -191,32 +191,32 @@ export function WatchlistGrid({
       </div>
 
       {/* Filter Toolbar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2 border-b border-[#292a2c] font-label">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 py-2 border-b border-[#292a2c] font-label">
         {/* Status Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1 sm:pb-0 scrollbar-none">
           <button
             type="button"
             onClick={() => handleTabChange("queued")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 whitespace-nowrap ${
               !isWatchedTab && !isRequestsTab
                 ? "bg-[#f2ca50] text-[#121315] shadow-sm"
                 : "bg-[#1b1c1e] text-[#99907c] hover:text-white border border-[#292a2c]"
             }`}
           >
-            <EyeOff className="w-4 h-4" />
+            <EyeOff className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Queued ({unwatchedCount})</span>
           </button>
 
           <button
             type="button"
             onClick={() => handleTabChange("watched")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 ${
+            className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 whitespace-nowrap ${
               isWatchedTab
                 ? "bg-[#f2ca50] text-[#121315] shadow-sm"
                 : "bg-[#1b1c1e] text-[#99907c] hover:text-white border border-[#292a2c]"
             }`}
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span>Watched & Logged ({watchedCount})</span>
           </button>
 
@@ -225,13 +225,13 @@ export function WatchlistGrid({
             <button
               type="button"
               onClick={() => handleTabChange("requests")}
-              className={`flex items-center gap-2 px-4 py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 ${
+              className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                 isRequestsTab
                   ? "bg-[#f2ca50] text-[#121315] shadow-sm"
                   : "bg-[#1b1c1e] text-[#99907c] hover:text-white border border-[#292a2c]"
               }`}
             >
-              <Inbox className="w-4 h-4" />
+              <Inbox className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Requests</span>
               <span
                 className={`px-1.5 py-0.2 rounded-full text-[10px] font-extrabold ${
@@ -249,7 +249,7 @@ export function WatchlistGrid({
         </div>
 
         {/* Media Category Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-2 sm:pb-0 scrollbar-none">
+        <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1 sm:pb-0 scrollbar-none">
           {[
             { id: "ALL", label: "All" },
             { id: "MOVIE", label: "Movies" },
@@ -260,7 +260,7 @@ export function WatchlistGrid({
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
-              className={`px-3 py-1.5 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 ${
+              className={`px-2.5 sm:px-3 py-1.5 rounded-md text-xs font-bold font-headline transition-all cursor-pointer shrink-0 whitespace-nowrap ${
                 activeCategory === cat.id
                   ? "bg-[#343537] text-[#e3e2e5] border border-[#4d4635]"
                   : "bg-transparent text-[#99907c] hover:text-[#e3e2e5]"
@@ -282,7 +282,7 @@ export function WatchlistGrid({
         </div>
       ) : items.length > 0 ? (
         isRequestsTab ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-4 md:gap-6">
             {items.map((item) => (
               <RequestCard
                 key={item.id}
@@ -304,7 +304,7 @@ export function WatchlistGrid({
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3.5 sm:gap-4 md:gap-6">
             {items.map((item) => (
               <WatchlistCard
                 key={item.id}
@@ -317,7 +317,7 @@ export function WatchlistGrid({
           </div>
         )
       ) : (
-        <div className="w-full p-12 text-center rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-8 font-label">
+        <div className="w-full p-8 sm:p-12 text-center rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-6 sm:my-8 font-label">
           {isRequestsTab ? (
             <Inbox className="w-12 h-12 text-[#99907c] mx-auto mb-3 stroke-[1.5]" />
           ) : (

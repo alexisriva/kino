@@ -24,11 +24,11 @@ interface HeroBannerProps {
 
 export function HeroBanner({ post }: HeroBannerProps) {
   return (
-    <section className="relative w-full rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-8 p-6 sm:p-8 lg:p-10 overflow-hidden">
-      <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+    <section className="relative w-full rounded-lg bg-[#1b1c1e] border border-[#292a2c] my-6 sm:my-8 p-4 sm:p-8 lg:p-10 overflow-hidden">
+      <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-6 sm:gap-8">
         {/* Poster Image Container */}
         {post.posterUrl && (
-          <div className="relative shrink-0 w-full sm:w-72 md:w-80 aspect-2/3 overflow-hidden rounded-md bg-[#121315] border border-[#292a2c]">
+          <div className="relative shrink-0 w-48 sm:w-72 md:w-80 max-w-full aspect-2/3 overflow-hidden rounded-md bg-[#121315] border border-[#292a2c] shadow-lg">
             <img
               src={post.posterUrl}
               alt={post.title}
@@ -39,9 +39,9 @@ export function HeroBanner({ post }: HeroBannerProps) {
         )}
 
         {/* Info & Excerpt */}
-        <div className="flex flex-col flex-1 items-start text-left space-y-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-sm bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30 text-[11px] font-bold uppercase tracking-wider font-label">
+        <div className="flex flex-col flex-1 items-start text-left space-y-4 sm:space-y-5 w-full">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-sm bg-[#f2ca50]/10 text-[#f2ca50] border border-[#f2ca50]/30 text-[11px] font-bold uppercase tracking-wider font-label">
               <Star className="w-3.5 h-3.5 fill-[#f2ca50]" /> Featured Spotlight
             </span>
             <span className="px-2.5 py-0.5 rounded-sm bg-[#292a2c] text-[#c6c6c9] text-xs font-bold uppercase tracking-wider font-label">
@@ -54,7 +54,7 @@ export function HeroBanner({ post }: HeroBannerProps) {
             )}
           </div>
 
-          <h1 className="font-headline text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#e3e2e5] leading-tight">
+          <h1 className="font-headline text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#e3e2e5] leading-tight">
             {post.title}
           </h1>
 
@@ -86,22 +86,24 @@ export function HeroBanner({ post }: HeroBannerProps) {
           </div>
 
           {/* Review Excerpt in Newsreader Serif */}
-          <p className="font-journal text-lg text-[#d0c5af] leading-relaxed line-clamp-3 italic">
+          <p className="font-journal text-base sm:text-lg text-[#d0c5af] leading-relaxed line-clamp-3 italic">
             "{post.review.replace(/[#*`_]/g, "")}"
           </p>
 
           {/* Actions & Likes */}
-          <div className="pt-4 flex flex-wrap items-center justify-between w-full gap-4 border-t border-[#292a2c]">
-            <LikeDislikeButtons
-              postId={post.id}
-              initialLikes={post.likesCount}
-              initialDislikes={post.dislikesCount}
-              size="md"
-            />
+          <div className="pt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between w-full gap-3 sm:gap-4 border-t border-[#292a2c]">
+            <div className="flex justify-start">
+              <LikeDislikeButtons
+                postId={post.id}
+                initialLikes={post.likesCount}
+                initialDislikes={post.dislikesCount}
+                size="md"
+              />
+            </div>
 
             <Link
               href={`/post/${post.slug}`}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-5 sm:px-6 py-2.5 sm:py-3 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-md transition-all cursor-pointer text-center"
             >
               <span>Read Full Journal Entry</span>
               <ArrowRight className="w-4 h-4" />

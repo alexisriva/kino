@@ -145,17 +145,17 @@ export function RequestMediaModal({ onClose, onRequestSubmitted }: RequestMediaM
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto font-label">
-      <div className="relative w-full max-w-xl my-8 p-6 sm:p-8 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md overflow-y-auto font-label">
+      <div className="relative w-full max-w-xl my-auto p-4 sm:p-6 md:p-8 rounded-lg bg-[#1f2022] border border-[#292a2c] text-[#e3e2e5] shadow-2xl max-h-[90dvh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-[#292a2c] pb-4 mb-6">
+        <div className="flex items-center justify-between border-b border-[#292a2c] pb-3 sm:pb-4 mb-4 sm:mb-6">
           <div className="flex items-center gap-2">
-            <Send className="w-5 h-5 text-[#f2ca50]" />
-            <h2 className="font-headline text-xl font-bold text-[#e3e2e5]">Request a Title</h2>
+            <Send className="w-5 h-5 sm:w-6 sm:h-6 text-[#f2ca50] shrink-0" />
+            <h2 className="font-headline text-lg sm:text-xl font-bold text-[#e3e2e5]">Request a Title</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer"
+            className="p-1 rounded-md text-[#99907c] hover:text-white hover:bg-[#292a2c] transition-colors cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
@@ -170,7 +170,7 @@ export function RequestMediaModal({ onClose, onRequestSubmitted }: RequestMediaM
         ) : (
           <>
             {/* OMDb API Auto-Fill Banner */}
-            <div className="p-4 rounded-md bg-[#121315] border border-[#4d4635] mb-6 flex items-center justify-between gap-3">
+            <div className="p-3 sm:p-4 rounded-md bg-[#121315] border border-[#4d4635] mb-4 sm:mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
                 <h4 className="text-xs font-bold text-[#f2ca50] flex items-center gap-1.5 font-headline">
                   <Sparkles className="w-4 h-4 text-[#f2ca50]" /> Auto-fill from OMDb API
@@ -182,7 +182,7 @@ export function RequestMediaModal({ onClose, onRequestSubmitted }: RequestMediaM
               <button
                 type="button"
                 onClick={() => setShowOmdbSearch(!showOmdbSearch)}
-                className="px-3 py-1 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shrink-0 cursor-pointer"
+                className="w-full sm:w-auto text-center px-3 py-1.5 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shrink-0 cursor-pointer"
               >
                 {showOmdbSearch ? 'Hide Search' : 'Search OMDb'}
               </button>
@@ -190,8 +190,8 @@ export function RequestMediaModal({ onClose, onRequestSubmitted }: RequestMediaM
 
             {/* OMDb Search Box */}
             {showOmdbSearch && (
-              <div className="p-4 rounded-md bg-[#121315] border border-[#292a2c] mb-6 space-y-3">
-                <div className="flex gap-2">
+              <div className="p-3 sm:p-4 rounded-md bg-[#121315] border border-[#292a2c] mb-4 sm:mb-6 space-y-3">
+                <div className="flex flex-col sm:flex-row gap-2">
                   <input
                     type="text"
                     placeholder="Search title (e.g. Dune, Severance)..."
@@ -200,23 +200,25 @@ export function RequestMediaModal({ onClose, onRequestSubmitted }: RequestMediaM
                     onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), handleOmdbSearch())}
                     className="w-full px-3.5 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] placeholder-[#99907c] focus:outline-none focus:border-[#f2ca50]"
                   />
-                  <select
-                    value={omdbSearchType}
-                    onChange={(e) => setOmdbSearchType(e.target.value)}
-                    className="px-3 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] cursor-pointer"
-                  >
-                    <option value="">All</option>
-                    <option value="movie">Movies</option>
-                    <option value="series">Series</option>
-                  </select>
-                  <button
-                    type="button"
-                    onClick={handleOmdbSearch}
-                    disabled={omdbLoading}
-                    className="px-4 py-2 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shrink-0 cursor-pointer"
-                  >
-                    {omdbLoading ? 'Searching...' : 'Search'}
-                  </button>
+                  <div className="flex gap-2">
+                    <select
+                      value={omdbSearchType}
+                      onChange={(e) => setOmdbSearchType(e.target.value)}
+                      className="flex-1 sm:flex-initial px-3 py-2 rounded-md bg-[#1b1c1e] border border-[#292a2c] text-xs text-[#e3e2e5] focus:outline-none focus:border-[#f2ca50] cursor-pointer"
+                    >
+                      <option value="">All</option>
+                      <option value="movie">Movies</option>
+                      <option value="series">Series</option>
+                    </select>
+                    <button
+                      type="button"
+                      onClick={handleOmdbSearch}
+                      disabled={omdbLoading}
+                      className="px-4 py-2 rounded-md bg-[#f2ca50] text-[#121315] font-headline font-bold text-xs shrink-0 cursor-pointer"
+                    >
+                      {omdbLoading ? 'Searching...' : 'Search'}
+                    </button>
+                  </div>
                 </div>
 
                 {omdbError && <p className="text-xs text-rose-400">{omdbError}</p>}

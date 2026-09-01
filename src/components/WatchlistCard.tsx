@@ -86,14 +86,14 @@ export function WatchlistCard({
       </div>
 
       {/* Card Info Content */}
-      <div className="p-4 flex flex-col flex-1 justify-between space-y-3 font-label">
+      <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between space-y-2.5 sm:space-y-3 font-label">
         <div>
-          <div className="flex items-center justify-between gap-2">
-            <h4 className="font-headline text-base font-bold text-[#e3e2e5] line-clamp-1">
+          <div className="flex items-center justify-between gap-1.5 sm:gap-2">
+            <h4 className="font-headline text-sm sm:text-base font-bold text-[#e3e2e5] line-clamp-1">
               {item.title}
             </h4>
             {item.releaseYear && (
-              <span className="text-xs font-semibold text-[#99907c]">
+              <span className="text-[11px] sm:text-xs font-semibold text-[#99907c] shrink-0">
                 {item.releaseYear}
               </span>
             )}
@@ -109,18 +109,18 @@ export function WatchlistCard({
           )}
 
           {item.plot && (
-            <p className="text-[11px] text-[#99907c] mt-1.5 line-clamp-2 italic font-journal">
-              "{item.plot}"
+            <p className="text-[11px] text-[#99907c] mt-1 sm:mt-1.5 line-clamp-2 italic font-journal">
+              {`"${item.plot}"`}
             </p>
           )}
         </div>
 
         {/* Action Button */}
         {item.isWatched && item.post ? (
-          <div className="pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
+          <div className="pt-2 sm:pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
             <Link
               href={`/post/${item.post.slug}?from=watchlist&tab=watched`}
-              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#f2ca50] border border-[#f2ca50]/30 font-headline font-bold text-xs transition-colors cursor-pointer"
+              className="w-full flex items-center justify-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#f2ca50] border border-[#f2ca50]/30 font-headline font-bold text-xs transition-colors cursor-pointer"
             >
               <span>Read Review</span>
               {item.post.userRating && (
@@ -132,11 +132,11 @@ export function WatchlistCard({
             </Link>
           </div>
         ) : isAdmin ? (
-          <div className="pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
+          <div className="pt-2 sm:pt-3 border-t border-[#292a2c] flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => onLogReview && onLogReview(item)}
-              className="w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-sm transition-all cursor-pointer"
+              className="w-full flex items-center justify-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-md bg-[#f2ca50] hover:bg-[#e9c349] text-[#121315] font-headline font-bold text-xs shadow-sm transition-all cursor-pointer"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Log & Review Entry</span>

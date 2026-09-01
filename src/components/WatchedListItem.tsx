@@ -30,19 +30,19 @@ export function WatchedListItem({
   const reviewSlug = item.post?.slug;
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 hover:bg-[#242629]/50 transition-colors">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 p-3.5 sm:p-4 hover:bg-[#242629]/50 transition-colors">
       {/* Show Title & Metadata */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           {reviewSlug ? (
             <Link
               href={`/post/${reviewSlug}?from=watchlist&tab=watched`}
-              className="font-headline text-base font-bold text-[#e3e2e5] hover:text-[#f2ca50] transition-colors truncate"
+              className="font-headline text-sm sm:text-base font-bold text-[#e3e2e5] hover:text-[#f2ca50] transition-colors truncate"
             >
               {item.title}
             </Link>
           ) : (
-            <h4 className="font-headline text-base font-bold text-[#e3e2e5] truncate">
+            <h4 className="font-headline text-sm sm:text-base font-bold text-[#e3e2e5] truncate">
               {item.title}
             </h4>
           )}
@@ -62,7 +62,7 @@ export function WatchedListItem({
       </div>
 
       {/* Rating, Review Link, and Admin Action */}
-      <div className="flex items-center gap-4 shrink-0 font-label justify-between sm:justify-end">
+      <div className="flex items-center gap-3 sm:gap-4 shrink-0 font-label justify-between sm:justify-end">
         {/* Rating Given */}
         <div>
           {userRating !== null && userRating !== undefined ? (

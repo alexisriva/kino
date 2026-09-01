@@ -80,11 +80,11 @@ export function EditableJournalReview({
   };
 
   return (
-    <article className="w-full p-6 sm:p-10 rounded-lg bg-[#1b1c1e] border border-[#292a2c] space-y-6">
+    <article className="w-full p-4 sm:p-8 lg:p-10 rounded-lg bg-[#1b1c1e] border border-[#292a2c] space-y-4 sm:space-y-6">
       {/* Header with Title and Edit Icon Button (Admin Only) */}
-      <div className="flex items-center justify-between border-b border-[#292a2c] pb-4">
-        <h2 className="font-headline text-2xl font-bold text-[#e3e2e5] flex items-center gap-2">
-          <Star className="w-5 h-5 text-[#f2ca50] fill-[#f2ca50]" /> Journal
+      <div className="flex items-center justify-between border-b border-[#292a2c] pb-3 sm:pb-4 gap-2">
+        <h2 className="font-headline text-lg sm:text-2xl font-bold text-[#e3e2e5] flex items-center gap-2">
+          <Star className="w-4 sm:w-5 h-4 sm:h-5 text-[#f2ca50] fill-[#f2ca50] shrink-0" /> Journal
           Entry & Critical Review
         </h2>
 
@@ -92,7 +92,7 @@ export function EditableJournalReview({
           <button
             type="button"
             onClick={handleStartEditing}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#99907c] hover:text-[#f2ca50] border border-[#292a2c] hover:border-[#f2ca50]/40 font-headline font-bold text-xs transition-colors cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#121315] hover:bg-[#292a2c] text-[#99907c] hover:text-[#f2ca50] border border-[#292a2c] hover:border-[#f2ca50]/40 font-headline font-bold text-xs transition-colors cursor-pointer shrink-0"
             title="Edit Journal Review"
           >
             <Pencil className="w-3.5 h-3.5" />
@@ -108,7 +108,7 @@ export function EditableJournalReview({
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
             disabled={saving}
-            className="w-full min-h-[220px] p-4 rounded-md bg-[#121315] border border-[#4d4635] text-[#e3e2e5] font-journal text-lg leading-relaxed focus:outline-none focus:border-[#f2ca50] focus:ring-1 focus:ring-[#f2ca50] transition-colors resize-y disabled:opacity-50"
+            className="w-full min-h-[200px] p-3.5 sm:p-4 rounded-md bg-[#121315] border border-[#4d4635] text-[#e3e2e5] font-journal text-base sm:text-lg leading-relaxed focus:outline-none focus:border-[#f2ca50] focus:ring-1 focus:ring-[#f2ca50] transition-colors resize-y disabled:opacity-50"
             placeholder="Write your review and thoughts..."
             rows={8}
           />
@@ -149,21 +149,21 @@ export function EditableJournalReview({
           </div>
         </div>
       ) : (
-        <div className="font-journal text-[#d0c5af] text-lg leading-relaxed space-y-4 whitespace-pre-line">
+        <div className="font-journal text-[#d0c5af] text-base sm:text-lg leading-relaxed space-y-4 whitespace-pre-line">
           {review}
         </div>
       )}
 
       {/* Tags Footer */}
       {tagsList.length > 0 && (
-        <div className="pt-6 border-t border-[#292a2c] flex items-center gap-2 flex-wrap font-label">
+        <div className="pt-4 sm:pt-6 border-t border-[#292a2c] flex items-center gap-2 flex-wrap font-label">
           <span className="text-xs font-semibold text-[#99907c] flex items-center gap-1">
             <Tag className="w-3.5 h-3.5 text-[#f2ca50]" /> Tags:
           </span>
           {tagsList.map((tag, idx) => (
             <span
               key={idx}
-              className="px-3 py-1 rounded-sm bg-[#121315] text-[#c6c6c9] text-xs font-medium border border-[#292a2c]"
+              className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-sm bg-[#121315] text-[#c6c6c9] text-xs font-medium border border-[#292a2c]"
             >
               #{tag.trim()}
             </span>
