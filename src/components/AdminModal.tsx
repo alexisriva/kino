@@ -74,7 +74,7 @@ export function AdminModal({
   const [review, setReview] = useState(editingPost?.review || "");
   const [tags, setTags] = useState(editingPost?.tags || "");
   const [isFeatured, setIsFeatured] = useState(
-    editingPost?.isFeatured || false,
+    editingPost ? (editingPost.isFeatured ?? false) : Boolean(watchlistItem),
   );
 
   const [formError, setFormError] = useState("");

@@ -251,16 +251,17 @@ describe('AdminModal', () => {
       expect(screen.getByText(/your star rating:/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/write your comprehensive analysis/i)).toBeInTheDocument();
       expect(screen.getByPlaceholderText(/masterpiece, scifi, mustwatch/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/feature on hero spotlight/i)).toBeInTheDocument();
+      const spotlightCheckbox = screen.getByLabelText(/feature on hero spotlight/i);
+      expect(spotlightCheckbox).toBeInTheDocument();
+      expect(spotlightCheckbox).toBeChecked();
 
-      // Enter review and tags
+      // Enter review and tags (spotlight is true by default)
       fireEvent.change(screen.getByPlaceholderText(/write your comprehensive analysis/i), {
         target: { value: 'Poetic, philosophical cinema at its greatest.' },
       });
       fireEvent.change(screen.getByPlaceholderText(/masterpiece, scifi, mustwatch/i), {
         target: { value: 'SciFi, Classics' },
       });
-      fireEvent.click(screen.getByLabelText(/feature on hero spotlight/i));
 
       const form = screen.getByRole('button', { name: /^publish entry$/i }).closest('form')!;
       fireEvent.submit(form);
@@ -282,6 +283,64 @@ describe('AdminModal', () => {
           isFeatured: true,
         }));
         expect(screen.getByText('Review published & Watchlist item marked as Watched!')).toBeInTheDocument();
+      });
+    });
+
+    it('allows unchecking feature on hero spotlight checkbox when logging from watchlist', async () => {
+      vi.mocked(createPostAction).mockResolvedValueOnce({
+        success: true,
+        post: {
+          id: 'p-new',
+          title: 'Solaris',
+          slug: 'solaris-1972',
+          mediaType: 'MOVIE',
+          releaseYear: 1972,
+          genre: 'Drama, Sci-Fi',
+          director: 'Andrei Tarkovsky',
+          cast: 'Natalya Bondarchuk, Donatas Banionis',
+          plot: 'A psychologist is sent to a space station...',
+          posterUrl: 'https://example.com/solaris.jpg',
+          imdbRating: '8.0/10',
+          userRating: 5.0,
+          review: 'Poetic, philosophical cinema at its greatest.',
+          tags: 'SciFi, Classics',
+          isFeatured: false,
+          isPublished: true,
+          likesCount: 0,
+          dislikesCount: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+      render(
+        <AdminModal
+          isAdmin={true}
+          watchlistItem={mockWatchlistItem}
+          onClose={mockOnClose}
+          onAdminStatusChange={mockOnAdminStatusChange}
+        />
+      );
+
+      const spotlightCheckbox = screen.getByLabelText(/feature on hero spotlight/i);
+      expect(spotlightCheckbox).toBeChecked();
+
+      // Uncheck spotlight
+      fireEvent.click(spotlightCheckbox);
+      expect(spotlightCheckbox).not.toBeChecked();
+
+      fireEvent.change(screen.getByPlaceholderText(/write your comprehensive analysis/i), {
+        target: { value: 'Poetic, philosophical cinema at its greatest.' },
+      });
+
+      const form = screen.getByRole('button', { name: /^publish entry$/i }).closest('form')!;
+      fireEvent.submit(form);
+
+      await waitFor(() => {
+        expect(createPostAction).toHaveBeenCalledWith(expect.objectContaining({
+          watchlistItemId: 'wl-item-1',
+          isFeatured: false,
+        }));
       });
     });
 
@@ -407,6 +466,19 @@ describe('AdminModal', () => {
       fireEvent.click(starHitbox);
 
       expect(screen.getByText('3.5 / 5.0')).toBeInTheDocument();
+    });
+
+    it('respects isFeatured false when editing an existing post with isFeatured: false', () => {
+      render(
+        <AdminModal
+          isAdmin={true}
+          editingPost={{ ...mockPost, isFeatured: false }}
+          onClose={mockOnClose}
+          onAdminStatusChange={mockOnAdminStatusChange}
+        />
+      );
+
+      expect(screen.getByLabelText(/feature on hero spotlight/i)).not.toBeChecked();
     });
   });
 
