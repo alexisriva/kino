@@ -3,7 +3,7 @@ import { Film, Home } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 selection:bg-[#f2ca50] selection:text-[#121315]">
+    <div className="flex-1 flex flex-col items-center justify-center p-4 selection:bg-[#f2ca50] selection:text-[#121315]">
       <div className="flex flex-col items-center text-center space-y-6 max-w-lg mx-auto">
         {/* Icon */}
         <div className="p-4 rounded-full bg-[#1b1c1e] border border-[#292a2c] shadow-lg">

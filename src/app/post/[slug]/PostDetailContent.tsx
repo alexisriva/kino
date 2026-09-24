@@ -41,7 +41,7 @@ export function PostDetailContent({
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
+    <div className="flex-1 flex flex-col bg-[#121315] text-[#e3e2e5] selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Header */}
       <Header
         currentView={isFromWatchlist ? "watchlist" : "journal"}

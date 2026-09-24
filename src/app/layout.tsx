@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "KINO — Cinema & Media Review Journal",
@@ -25,7 +26,10 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/logo.png" type="image/png" />
       </head>
-      <body className="min-h-full flex flex-col bg-[#121315] text-[#e3e2e5]">{children}</body>
+      <body className="min-h-screen flex flex-col bg-[#121315] text-[#e3e2e5]">
+        <div className="flex-1 flex flex-col">{children}</div>
+        <Footer />
+      </body>
     </html>
   );
 }

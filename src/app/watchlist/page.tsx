@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Header } from "@/components/Header";
 import { WatchlistGrid } from "@/components/WatchlistGrid";
 import { AdminModal } from "@/components/AdminModal";
 import { RefreshCw } from "lucide-react";
-import Link from "next/link";
 
 function WatchlistContent() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -32,7 +31,7 @@ function WatchlistContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121315] text-[#e3e2e5] flex flex-col selection:bg-[#f2ca50] selection:text-[#121315]">
+    <div className="flex-1 flex flex-col bg-[#121315] text-[#e3e2e5] selection:bg-[#f2ca50] selection:text-[#121315]">
       {/* Top Header */}
       <Header
         isAdmin={isAdmin}
@@ -65,26 +64,6 @@ function WatchlistContent() {
           onAdminStatusChange={(status) => setIsAdmin(status)}
         />
       )}
-
-      {/* Footer */}
-      <footer className="w-full border-t border-[#292a2c] bg-[#0d0e10] py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#99907c] font-label">
-          <div className="flex items-center gap-2.5">
-            <img
-              src="/logo.png"
-              alt="KINO Logo"
-              className="h-6 w-auto object-contain"
-            />
-            <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">
-              KINO
-            </span>
-            <span>— Personal Cinema & Media Journal</span>
-          </div>
-          <p className="text-center sm:text-right">
-            Alexis Rivadeneira © {new Date().getFullYear()}
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
