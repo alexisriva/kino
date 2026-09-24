@@ -156,11 +156,10 @@ export function WatchlistGrid({
           </div>
           <div>
             <h3 className="font-headline text-base sm:text-lg font-bold text-[#e3e2e5]">
-              Personal Media Watchlist
+              Personal Watchlist
             </h3>
             <p className="text-xs text-[#99907c] font-label">
-              Queue upcoming films and series to watch, review, and mark as
-              completed.
+              Queue upcoming movies and series to watch and review.
             </p>
           </div>
         </div>
@@ -234,8 +233,8 @@ export function WatchlistGrid({
                   isRequestsTab
                     ? "bg-[#121315] text-[#f2ca50]"
                     : requestsCount > 0
-                    ? "bg-[#f2ca50] text-[#121315]"
-                    : "bg-[#292a2c] text-[#99907c]"
+                      ? "bg-[#f2ca50] text-[#121315]"
+                      : "bg-[#292a2c] text-[#99907c]"
                 }`}
               >
                 {requestsCount}
@@ -273,7 +272,9 @@ export function WatchlistGrid({
         <div className="w-full py-24 flex flex-col items-center justify-center space-y-3 text-[#99907c] font-label">
           <RefreshCw className="w-8 h-8 animate-spin text-[#f2ca50]" />
           <p className="text-xs font-semibold">
-            {isRequestsTab ? "Loading Watch Requests..." : "Loading Watchlist Items..."}
+            {isRequestsTab
+              ? "Loading Watch Requests..."
+              : "Loading Watchlist Items..."}
           </p>
         </div>
       ) : items.length > 0 ? (
@@ -323,15 +324,15 @@ export function WatchlistGrid({
             {isRequestsTab
               ? "No Pending Watch Requests"
               : isWatchedTab
-              ? "No Watched Items Found"
-              : "No Queued Items Found"}
+                ? "No Watched Items Found"
+                : "No Queued Items Found"}
           </h3>
           <p className="text-xs text-[#99907c] mt-1 max-w-sm mx-auto">
             {isRequestsTab
               ? "Viewer requests will appear here for you to accept into your watchlist queue or reject."
               : isWatchedTab
-              ? "Items marked as watched or reviewed will appear here."
-              : "Add upcoming movies, series, or docs to your watchlist using the Add button above."}
+                ? "Items marked as watched or reviewed will appear here."
+                : "Add upcoming movies, series, or docs to your watchlist using the Add button above."}
           </p>
         </div>
       )}

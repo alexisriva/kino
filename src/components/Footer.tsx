@@ -13,7 +13,7 @@ export function Footer() {
           <span className="font-headline font-extrabold text-[#f2ca50] text-lg tracking-tight">
             KINO
           </span>
-          <span>— Personal Cinema & Media Journal</span>
+          <span>— Personal Movies & Series Journal</span>
         </div>
         <p className="text-center sm:text-right">
           Alexis Rivadeneira © {new Date().getFullYear()}
