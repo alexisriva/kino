@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { Header } from '@/components/Header';
-import { WatchlistGrid } from '@/components/WatchlistGrid';
-import { AdminModal } from '@/components/AdminModal';
-import { RefreshCw } from 'lucide-react';
-import Link from 'next/link';
+import React, { useState, useEffect, Suspense } from "react";
+import { Header } from "@/components/Header";
+import { WatchlistGrid } from "@/components/WatchlistGrid";
+import { AdminModal } from "@/components/AdminModal";
+import { RefreshCw } from "lucide-react";
+import Link from "next/link";
 
 function WatchlistContent() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -16,7 +16,7 @@ function WatchlistContent() {
   useEffect(() => {
     async function checkAdmin() {
       try {
-        const res = await fetch('/api/admin/check');
+        const res = await fetch("/api/admin/check");
         const data = await res.json();
         setIsAdmin(data.authenticated);
       } catch (err) {
@@ -81,8 +81,7 @@ function WatchlistContent() {
             <span>— Personal Cinema & Media Journal</span>
           </div>
           <p className="text-center sm:text-right">
-            Curated cinema reviews, docs, & series with anonymous voting and
-            social sharing.
+            Alexis Rivadeneira © {new Date().getFullYear()}
           </p>
         </div>
       </footer>

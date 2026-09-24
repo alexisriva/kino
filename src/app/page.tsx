@@ -5,7 +5,11 @@ import { Header } from "@/components/Header";
 import { HeroBanner } from "@/components/HeroBanner";
 import { MediaGrid } from "@/components/MediaGrid";
 import { AdminModal } from "@/components/AdminModal";
-import { getPostsAction, getFeaturedPostAction, deletePostAction } from "@/actions/postActions";
+import {
+  getPostsAction,
+  getFeaturedPostAction,
+  deletePostAction,
+} from "@/actions/postActions";
 import { RefreshCw } from "lucide-react";
 
 const SORT_STORAGE_KEY = "kino_active_sort";
@@ -29,7 +33,10 @@ export default function HomePage() {
   useEffect(() => {
     try {
       const savedSort = localStorage.getItem(SORT_STORAGE_KEY);
-      if (savedSort && ["latest", "rating", "likes", "oldest"].includes(savedSort)) {
+      if (
+        savedSort &&
+        ["latest", "rating", "likes", "oldest"].includes(savedSort)
+      ) {
         setActiveSort(savedSort);
       }
     } catch {
@@ -123,9 +130,9 @@ export default function HomePage() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 w-full pb-16">
         {/* Hero Spotlight (Featured Entry) — remains pinned and unaffected by grid sorting */}
-        {featuredPost &&
-          !selectedTag &&
-          activeCategory === "ALL" && <HeroBanner post={featuredPost} />}
+        {featuredPost && !selectedTag && activeCategory === "ALL" && (
+          <HeroBanner post={featuredPost} />
+        )}
 
         {/* Loading Indicator */}
         {loading ? (
@@ -180,8 +187,7 @@ export default function HomePage() {
             <span>— Personal Cinema & Media Journal</span>
           </div>
           <p className="text-center sm:text-right">
-            Curated cinema reviews, docs, & series with anonymous voting and
-            social sharing.
+            Alexis Rivadeneira © {new Date().getFullYear()}
           </p>
         </div>
       </footer>
